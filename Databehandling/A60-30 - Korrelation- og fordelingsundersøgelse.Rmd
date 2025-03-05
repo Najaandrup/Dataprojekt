@@ -1,0 +1,215 @@
+---
+title: "A60-30 Korrelationer"
+author: '209509'
+date: "2025-03-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+# A60-30
+
+### Indlæs data
+
+```{r}
+a60_30 <- read.table(file = 'egfp_a60_30_polyA_position.tsv', sep = '\t', header = TRUE)
+```
+
+### Definér længde af polyA-halen og adapteren
+
+```{r}
+a60_30['polyA_length'] <- a60_30$end - a60_30$start
+a60_30['adapter_length'] <- a60_30$start - 1
+```
+
+
+### Plot af adapterlængden mod polyA-længden
+
+```{r}
+plot(a60_30$adapter_length,a60_30$polyA_length)
+```
+
+### Plot af polyA-halens længde
+
+```{r}
+plot(a60_30$polyA_length)
+```
+
+### Check normalfordeling af polyA-halens længde
+
+```{r}
+hist(a60_30$polyA_length, probability = TRUE)
+lines(density(a60_30$polyA_length), col = "red", lwd = 2)
+
+```
+
+```{r}
+qqnorm(a60_30$polyA_length)
+qqline(a60_30$polyA_length, col = "red")
+```
+
+#### Log transformation
+
+```{r}
+hist(log(a60_30$polyA_length), probability = TRUE)
+lines(density(log(a60_30$polyA_length)), col = "red", lwd = 2)
+```
+
+```{r}
+qqnorm(log(a60_30$polyA_length))
+qqline(log(a60_30$polyA_length), col = "red")
+```
+
+#### Square root
+
+```{r}
+hist(sqrt(a60_30$polyA_length), probability = TRUE)
+lines(density(sqrt(a60_30$polyA_length)), col = "red", lwd = 2)
+```
+
+```{r}
+qqnorm(sqrt(a60_30$polyA_length))
+qqline(sqrt(a60_30$polyA_length), col = "red")
+```
+
+#### Invers
+
+```{r}
+hist(1/(a60_30$polyA_length), probability = TRUE)
+lines(density(1/(a60_30$polyA_length)), col = "red", lwd = 2)
+```
+
+```{r}
+qqnorm(1/(a60_30$polyA_length))
+qqline(1/(a60_30$polyA_length), col = "red")
+```
+
+
+### Plot af adapterens længde
+
+```{r}
+plot(a60_30$adapter_length)
+```
+
+### Check normalfordeling af adapterens længde
+
+```{r}
+hist(a60_30$adapter_length, probability = TRUE)
+lines(density(a60_30$adapter_length), col = "red", lwd = 2)
+
+```
+
+```{r}
+qqnorm(a60_30$adapter_length)
+qqline(a60_30$adapter_length, col = "red")
+```
+
+
+
+### Check anden fordeling for polyAhalens længde - her gamma
+
+```{r}
+library(fitdistrplus)
+fit <- fitdist(a60_30$polyA_length, "gamma")
+qqplot(qgamma(ppoints(length(a60_30$polyA_length)), shape = fit$estimate[1], rate = fit$estimate[2]), 
+       a60_30$polyA_length)
+abline(0, 1, col = "red", lwd = 2)
+
+```
+
+### Her: Weibull
+
+```{r}
+weibull_fit <- fitdistr(a60_30$polyA_length, "weibull")
+
+# Extract parameters
+shape <- weibull_fit$estimate["shape"]
+scale <- weibull_fit$estimate["scale"]
+
+# Q-Q Plot for Weibull Distribution
+qqplot(qweibull(ppoints(length(a60_30$polyA_length)), shape = shape, scale = scale), 
+       a60_30$polyA_length, main = "Weibull Q-Q Plot")
+abline(0, 1, col = "red", lwd = 2)
+```
+
+
+
+### Check normalfordeling af polyA-halens startstidspunkt
+
+```{r}
+hist(a60_30$start, probability = TRUE)
+lines(density(a60_30$start), col = "red", lwd = 2)
+
+```
+
+```{r}
+qqnorm(a60_30$start)
+qqline(a60_30$start, col = "red")
+```
+
+
+
+
+### Find gennemsnitslængde
+
+```{r}
+mean_polyA_start_60 <- mean(a60_30$start)
+mean_polyA_end_60 <- mean(a60_30$end)
+mean_poly_length_60 <- mean(a60_30$polyA_length)
+mean_adapter_length_60 <- mean(a60_30$adapter_length)
+```
+
+
+
+
+
+
+
+
+
+# Lav filteret sæt (helst uden outliers)
+
+```{r}
+filtered_a60_30 <- a60_30[a60_30$polyA_length < quantile(a60_30$polyA_length, 0.99),]
+filtered_a60_30 <- filtered_a60_30[a60_30$adapter_length < quantile(a60_30$adapter_length, 0.99),]
+```
+
+#### Plot igen adapterens længde mod polyA-halens længde
+
+```{r}
+plot(filtered_a60_30$adapter_length,filtered_a60_30$polyA_length)
+```
+
+### Check normalfordeling af polyA-halens længde
+
+```{r}
+hist(filtered_a60_30$polyA_length, probability = TRUE)
+lines(density(filtered_a60_30$polyA_length), col = "red", lwd = 2)
+
+```
+
+
+```{r}
+qqnorm(filtered_a60_30$polyA_length)
+qqline(filtered_a60_30$polyA_length, col = "red")
+```
+
+Above suggets skewness.
+
+
+### Check normalfordeling af adapterens længde
+
+```{r}
+hist(filtered_a60_30$adapter_length, probability = TRUE)
+lines(density(filtered_a60_30$adapter_length), col = "red", lwd = 2)
+```
+
+
+```{r}
+qqnorm(filtered_a60_30$adapter_length)
+qqline(filtered_a60_30$adapter_length, col = "red")
+```
