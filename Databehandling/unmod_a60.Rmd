@@ -1,0 +1,205 @@
+---
+title: "Unmod_a60"
+author: "Naja Andrup Pedersen"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+# A60-unmod
+
+### Indlæs data
+
+```{r}
+a60_unmod <- read.table(file = "egfp_a60_unmod_polyA_position.tsv", sep = "\t", header = TRUE)
+```
+
+### Definér længde af polyA-halen og adapteren
+
+```{r}
+a60_unmod["polyA_length"] <- a60_unmod$end - a60_unmod$start
+a60_unmod["adapter_length"] <- a60_unmod$start - 1
+```
+
+
+### Plot adapterlængden mod polyA-længden
+
+```{r}
+plot(a60_unmod$adapter_length, a60_unmod$polyA_length,
+     xlab = "Adapter længde", 
+     ylab = "PolyA længde")
+```
+
+### Plot polyA-længden mod adapterlængden
+
+```{r}
+plot(a60_unmod$polyA_length, a60_unmod$adapter_length,
+     xlab = "PolyA længde", 
+     ylab = "Adapter længde")
+```
+
+### Plot polyA-halens længde
+
+```{r}
+plot(a60_unmod$polyA_length)
+```
+
+### Plot adapternes længde
+
+```{r}
+plot(a60_unmod$adapter_length)
+```
+
+
+### Tjek for normalfordeling
+
+Vi bruger histogrammer og QQ-plots til at vurdere, om længderne er normalfordelte.
+
+```{r}
+hist(a60_unmod$polyA_length, breaks = 50, main = "Histogram over polyA-længder", xlab = "PolyA længde")
+hist(a60_unmod$adapter_length, breaks = 50, main = "Histogram over adapterlængder", xlab = "Adapter længde")
+```
+
+```{r}
+qqnorm(a60_unmod$polyA_length)
+qqline(a60_unmod$polyA_length, col = "red")
+
+qqnorm(a60_unmod$adapter_length)
+qqline(a60_unmod$adapter_length, col = "green")
+```
+
+
+### Korrelation mellem længderne
+
+Vi udregner korrelationen for at se, om der er en sammenhæng.
+
+```{r}
+cor(a60_unmod$polyA_length, a60_unmod$adapter_length, method = "pearson")
+cor(a60_unmod$polyA_length, a60_unmod$adapter_length, method = "spearman")
+```
+
+Meget lille sammenhæng - næsten ingen...
+
+### Boxplot for at identificere outliers
+
+For at forstå fordelingen laver vi boxplots.
+
+```{r}
+boxplot(a60_unmod$polyA_length, main = "PolyA længde", ylab = "Længde")
+
+boxplot(a60_unmod$adapter_length, main = "Adapter længde", ylab = "Længde")
+```
+
+
+### Scatterplot med regression
+
+```{r}
+library(ggplot2)
+
+ggplot(a60_unmod, aes(x = polyA_length, y = adapter_length)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "red") +
+  labs(title = "Scatter plot af polyA og adapter længde",
+       x = "PolyA længde",
+       y = "Adapter længde")
+```
+
+### Log-transformation
+
+```{r}
+a60_unmod$log_polyA_length <- log(a60_unmod$polyA_length + 1)  
+a60_unmod$log_adapter_length <- log(a60_unmod$adapter_length + 1)  
+cor(a60_unmod$log_polyA_length, a60_unmod$log_adapter_length, method = "pearson")
+```
+
+Tjek for negative, nul eller NA-værdier:
+```{r}
+sum(is.na(a60_unmod$polyA_length))  # Antal NA'er i polyA-længder
+sum(is.na(a60_unmod$adapter_length))  # Antal NA'er i adapter-længder
+sum(a60_unmod$polyA_length <= 0)  # Antal værdier ≤ 0
+sum(a60_unmod$adapter_length <= 0)  # Antal værdier ≤ 0
+```
+
+Der er 4 værdier <= 0, så den fjerner vi:
+```{r}
+a60_unmod_filtered <- subset(a60_unmod, polyA_length > 0 & adapter_length > 0)
+```
+
+Vi laver log-transformation igen
+```{r}
+a60_unmod_filtered$log_polyA_length <- log(a60_unmod_filtered$polyA_length)
+a60_unmod_filtered$log_adapter_length <- log(a60_unmod_filtered$adapter_length)
+cor(a60_unmod_filtered$log_polyA_length, a60_unmod_filtered$log_adapter_length, method = "pearson")
+```
+
+Stadig meget svar korrelation.
+
+#### Log-transformerede data visualiseret
+
+```{r}
+ggplot(a60_unmod_filtered, aes(x = log_polyA_length, y = log_adapter_length)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm", color = "red") +
+  labs(title = "Scatter plot af log-transformerede længder",
+       x = "Log(PolyA længde)",
+       y = "Log(Adapter længde)")
+```
+
+
+### Median af polyA
+
+Vi vil gerne tjekke hvad medianen af polyA-længden er
+
+```{r}
+median_polyA <- median(a60_unmod$polyA_length)
+print(median_polyA)
+```
+
+```{r}
+estimated_factor <- median_polyA / 60
+print(estimated_factor)
+```
+
+
+### Filtrering af data
+
+Vi filtrerer outliers vær baseret på 1. quartile og 3. quartile.
+
+```{r}
+Q1 <- quantile(a60_unmod$polyA_length, 0.25)
+Q3 <- quantile(a60_unmod$polyA_length, 0.75)
+IQR_value <- Q3 - Q1
+
+filtered_data <- subset(a60_unmod, polyA_length > (Q1 - 1.5 * IQR_value) & polyA_length < (Q3 + 1.5 * IQR_value))
+```
+
+#### Scatterplot med regression efter filtrering
+
+```{r}
+ggplot(filtered_data, aes(x = polyA_length, y = adapter_length)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", color = "red") +
+  labs(title = "Scatter plot af polyA og adapter længde",
+       x = "PolyA længde",
+       y = "Adapter længde")
+```
+
+
+### Scatterplot for forskellige undergrupper
+
+```{r}
+a60_unmod$polyA_category <- cut(a60_unmod$polyA_length, 
+                                breaks = c(0, 500, 1000, 2000, Inf), 
+                                labels = c("Kort", "Mellem", "Lang", "Meget lang"))
+```
+
+
+```{r}
+ggplot(a60_unmod, aes(x = polyA_length, y = adapter_length, color = polyA_category)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm") +
+  labs(title = "PolyA vs Adapter længde opdelt efter grupper")
+```
+
+
