@@ -1,0 +1,288 @@
+---
+title: "Vectorization - TEST"
+author: '209509'
+date: "2025-03-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+test_data <-  read.table(file = 'data_values.tsv', sep = '\t', header = TRUE)
+test_data["polya_length"] <- test_data$polya_end - test_data$polya_start
+```
+
+```{r}
+list <- lapply(strsplit(test_data$signal,","),as.numeric)
+```
+
+
+```{r}
+polya_list <- list()
+
+for (i in seq_along(list)) {
+  polya_list[[i]] <- list[[i]][test_data$polya_start[i]:test_data$polya_end[i]]  
+}
+```
+
+### Vector with length 240
+
+```{r}
+nwindows = 240
+list_vectorized <- list()
+
+for (i in seq_along(polya_list)){
+  vector_test <- polya_list[[i]]
+  window_size <- length(vector_test) / nwindows
+  window_size <- trunc(window_size)
+  
+  lwin <- rep(window_size, nwindows)
+  rest <- length(vector_test) - window_size * nwindows
+  
+  add_positions <- sample(1:nwindows, rest)
+  lwin[add_positions] <- lwin[add_positions] + 1
+  
+  window_ends <- cumsum(lwin)
+  window_starts <- window_ends - lwin + 1
+  
+  vector_mean <- sapply(1:nwindows, function(j)
+    mean(vector_test[seq(window_starts[j], window_ends[j])]))
+  
+  list_vectorized[[i]] <- vector_mean
+}
+
+polya_matrix <- do.call(rbind,list_vectorized)
+```
+
+
+```{r}
+row_medians <- apply(polya_matrix, 1, median)  
+polya_matrix_normalized <- sweep(polya_matrix, 1, row_medians, FUN = "/")
+```
+
+
+```{r}
+library(ggplot2)
+
+# Compute column-wise mean and standard deviation
+col_means <- colMeans(polya_matrix_normalized)  # Mean for each column
+col_sd <- apply(polya_matrix_normalized, 2, sd)  # Standard deviation for each column
+
+# Create a data frame for ggplot
+plot_data <- data.frame(
+  Index = 1:ncol(polya_matrix_normalized),  # Column index (1 to 240)
+  Mean = col_means,
+  SD_Upper = col_means + col_sd,  # Mean + SD
+  SD_Lower = col_means - col_sd   # Mean - SD
+)
+
+# Plot with ggplot2
+ggplot(plot_data, aes(x = Index, y = Mean)) +
+  geom_line(color = "blue", size = 1) +  # Mean line
+  geom_ribbon(aes(ymin = SD_Lower, ymax = SD_Upper), fill = "lightblue", alpha = 0.4) +  # Shaded SD region
+  labs(title = "Mean ± Standard Deviation for Each Column",
+       x = "Column Index",
+       y = "Normalized Value") +
+  theme_minimal()
+```
+
+
+### Vector with length 480
+
+```{r}
+nwindows = 480
+list_vectorized <- list()
+
+for (i in seq_along(polya_list)){
+  vector_test <- polya_list[[i]]
+  window_size <- length(vector_test) / nwindows
+  window_size <- trunc(window_size)
+  
+  lwin <- rep(window_size, nwindows)
+  rest <- length(vector_test) - window_size * nwindows
+  
+  add_positions <- sample(1:nwindows, rest)
+  lwin[add_positions] <- lwin[add_positions] + 1
+  
+  window_ends <- cumsum(lwin)
+  window_starts <- window_ends - lwin + 1
+  
+  vector_mean <- sapply(1:nwindows, function(j)
+    mean(vector_test[seq(window_starts[j], window_ends[j])]))
+  
+  list_vectorized[[i]] <- vector_mean
+}
+
+polya_matrix <- do.call(rbind,list_vectorized)
+```
+
+
+```{r}
+row_medians <- apply(polya_matrix, 1, median)  
+polya_matrix_normalized <- sweep(polya_matrix, 1, row_medians, FUN = "/")
+```
+
+
+```{r}
+library(ggplot2)
+
+# Compute column-wise mean and standard deviation
+col_means <- colMeans(polya_matrix_normalized)  # Mean for each column
+col_sd <- apply(polya_matrix_normalized, 2, sd)  # Standard deviation for each column
+
+# Create a data frame for ggplot
+plot_data <- data.frame(
+  Index = 1:ncol(polya_matrix_normalized),  # Column index (1 to 240)
+  Mean = col_means,
+  SD_Upper = col_means + col_sd,  # Mean + SD
+  SD_Lower = col_means - col_sd   # Mean - SD
+)
+
+# Plot with ggplot2
+ggplot(plot_data, aes(x = Index, y = Mean)) +
+  geom_line(color = "blue", size = 1) +  # Mean line
+  geom_ribbon(aes(ymin = SD_Lower, ymax = SD_Upper), fill = "lightblue", alpha = 0.4) +  # Shaded SD region
+  labs(title = "Mean ± Standard Deviation for Each Column",
+       x = "Column Index",
+       y = "Normalized Value") +
+  theme_minimal()
+```
+
+### Vector with length 120
+
+```{r}
+nwindows = 120
+list_vectorized <- list()
+
+for (i in seq_along(polya_list)){
+  vector_test <- polya_list[[i]]
+  window_size <- length(vector_test) / nwindows
+  window_size <- trunc(window_size)
+  
+  lwin <- rep(window_size, nwindows)
+  rest <- length(vector_test) - window_size * nwindows
+  
+  add_positions <- sample(1:nwindows, rest)
+  lwin[add_positions] <- lwin[add_positions] + 1
+  
+  window_ends <- cumsum(lwin)
+  window_starts <- window_ends - lwin + 1
+  
+  vector_mean <- sapply(1:nwindows, function(j)
+    mean(vector_test[seq(window_starts[j], window_ends[j])]))
+  
+  list_vectorized[[i]] <- vector_mean
+}
+
+polya_matrix <- do.call(rbind,list_vectorized)
+```
+
+
+```{r}
+row_medians <- apply(polya_matrix, 1, median)  
+polya_matrix_normalized <- sweep(polya_matrix, 1, row_medians, FUN = "/")
+```
+
+
+```{r}
+library(ggplot2)
+
+# Compute column-wise mean and standard deviation
+col_means <- colMeans(polya_matrix_normalized)  # Mean for each column
+col_sd <- apply(polya_matrix_normalized, 2, sd)  # Standard deviation for each column
+
+# Create a data frame for ggplot
+plot_data <- data.frame(
+  Index = 1:ncol(polya_matrix_normalized),  # Column index (1 to 240)
+  Mean = col_means,
+  SD_Upper = col_means + col_sd,  # Mean + SD
+  SD_Lower = col_means - col_sd   # Mean - SD
+)
+
+# Plot with ggplot2
+ggplot(plot_data, aes(x = Index, y = Mean)) +
+  geom_line(color = "blue", size = 1) +  # Mean line
+  geom_ribbon(aes(ymin = SD_Lower, ymax = SD_Upper), fill = "lightblue", alpha = 0.4) +  # Shaded SD region
+  labs(title = "Mean ± Standard Deviation for Each Column",
+       x = "Column Index",
+       y = "Normalized Value") +
+  theme_minimal()
+```
+
+
+### As one function:
+```{r}
+process_and_plot_data <- function(input_file, nwindows = 240) {
+  # Step 1: Read the data and calculate polya_length
+  test_data <- read.table(file = input_file, sep = '\t', header = TRUE)
+
+  # Step 2: Split the 'signal' column and convert to a list of numeric vectors
+  signal_list <- lapply(strsplit(test_data$signal, ","), as.numeric)
+
+  # Step 3: Create 'polya_list' with signal slices based on start and end
+  polya_list <- list()
+  for (i in seq_along(signal_list)) {
+    polya_list[[i]] <- signal_list[[i]][test_data$polya_start[i]:test_data$polya_end[i]]
+  }
+
+  # Step 4: Vectorize the data and compute the mean for each window
+  list_vectorized <- list()
+  for (i in seq_along(polya_list)) {
+    vector_test <- polya_list[[i]]
+    window_size <- length(vector_test) / nwindows
+    window_size <- trunc(window_size)
+    
+    lwin <- rep(window_size, nwindows)
+    rest <- length(vector_test) - window_size * nwindows
+    
+    add_positions <- sample(1:nwindows, rest)
+    lwin[add_positions] <- lwin[add_positions] + 1
+    
+    window_ends <- cumsum(lwin)
+    window_starts <- window_ends - lwin + 1
+    
+    vector_mean <- sapply(1:nwindows, function(j)
+      mean(vector_test[seq(window_starts[j], window_ends[j])]))
+    
+    list_vectorized[[i]] <- vector_mean
+  }
+  
+  # Step 5: Combine the list into a matrix
+  polya_matrix <- do.call(rbind, list_vectorized)
+
+  # Step 6: Normalize the matrix by dividing each row by its median
+  row_medians <- apply(polya_matrix, 1, median)
+  polya_matrix_normalized <- sweep(polya_matrix, 1, row_medians, FUN = "/")
+
+  # Step 7: Plot the results (Mean ± SD for each column)
+  library(ggplot2)
+  
+  col_means <- colMeans(polya_matrix_normalized)  # Mean for each column
+  col_sd <- apply(polya_matrix_normalized, 2, sd)  # Standard deviation for each column
+
+  # Create a data frame for plotting
+  plot_data <- data.frame(
+    Index = 1:ncol(polya_matrix_normalized),  # Column index (1 to 240)
+    Mean = col_means,
+    SD_Upper = col_means + col_sd,  # Mean + SD
+    SD_Lower = col_means - col_sd   # Mean - SD
+  )
+
+  # Generate the plot
+  ggplot(plot_data, aes(x = Index, y = Mean)) +
+    geom_line(color = "blue", size = 1) +  # Mean line
+    geom_ribbon(aes(ymin = SD_Lower, ymax = SD_Upper), fill = "lightblue", alpha = 0.4) +  # Shaded SD region
+    labs(title = "Mean ± Standard Deviation for Each Column",
+         x = "Column Index",
+         y = "Normalized Value") +
+    theme_minimal()
+}
+```
+
+
+```{r}
+process_and_plot_data('data_values.tsv', nwindows = 120)
+```
+
