@@ -38,38 +38,32 @@ a120_unmod['polyA_length'] <- a120_unmod$end - a120_unmod$start
 
 ### Histograms of all the data in each set
 
-
 ```{r}
-# Load required packages
-library(ggplot2)
-
-# List of datasets
 datasets <- list(
-  "a60_30" = a60_30,
-  "a60_60" = a60_60,
-  "a60_unmod" = a60_unmod,
-  "a120_1mod" = a120_1mod,
-  "a120_2mod" = a120_2mod,
-  "a120_4mod" = a120_4mod,
-  "a120_unmod" = a120_unmod
+  a60_30 = a60_30,
+  a60_60 = a60_60,
+  a60_unmod = a60_unmod,
+  a120_1mod = a120_1mod,
+  a120_2mod = a120_2mod,
+  a120_4mod = a120_4mod,
+  a120_unmod = a120_unmod
 )
 
-# Loop through datasets and plot one at a time
 for (name in names(datasets)) {
-  p <- ggplot(datasets[[name]], aes(x = polyA_length)) +
-    geom_histogram(aes(y = ..density..), 
-                   fill = "skyblue", 
-                   color = "white", 
-                   alpha = 0.7, 
-                   bins = 50) +
-    geom_density(color = "red", lwd = 1.2) +
-    theme_minimal() +
-    labs(title = paste("Histogram of Poly(A) Tail Length -", name),
-         x = "Poly(A) Tail Length", 
-         y = "Density") +
-    theme(plot.title = element_text(size = 12, face = "bold"))
+  polyA_length <- datasets[[name]]$polyA_length
   
-  print(p)  # Print each plot one by one
+  hist(polyA_length, 
+       probability = TRUE, 
+       main = paste("Density Plot of polyA Lengths -", name), 
+       xlab = "PolyA Length", 
+       ylab = "Density", 
+       xlim = c(0, 10000),
+       col = "lightblue",
+       border = "black",         
+       breaks = 100)              
+  
+  lines(density(polyA_length), col = "red", lwd = 2)
 }
 
 ```
+
