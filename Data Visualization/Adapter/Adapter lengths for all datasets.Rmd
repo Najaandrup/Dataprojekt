@@ -1,0 +1,11 @@
+---
+title: "Adapter lengths for all datasets"
+output: html_document
+date: "2025-03-19"
+---
+
+## Indlæs data
+
+```{r}
+a60_unmod <- read.table(file = "egfp_a60_unmod_polyA_position.tsv", sep = "\t", header = TRUE)
+```
