@@ -72,7 +72,7 @@ for (name in names(datasets)) {
 for (name in names(datasets)) {
   adapter_length <- datasets[[name]]$adapter_length
   
-  # Remove values ≤ 0
+  # Remove values <= 0
   adapter_length <- adapter_length[adapter_length > 0]
   
   log_adapter_length <- log10(adapter_length) 
