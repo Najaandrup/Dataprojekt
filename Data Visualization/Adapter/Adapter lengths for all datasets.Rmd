@@ -4,8 +4,60 @@ output: html_document
 date: "2025-03-19"
 ---
 
-## Indlæs data
+## Indlæs alle datasæt
 
 ```{r}
-a60_unmod <- read.table(file = "egfp_a60_unmod_polyA_position.tsv", sep = "\t", header = TRUE)
+a60_unmod <- read.table(file = "a60_unmod_polyA_position.tsv", sep = "\t", header = TRUE)
+a60_30 <- read.table(file = "a60_30_polyA_position.tsv", sep = "\t", header = TRUE)
+a60_60 <- read.table(file = "a60_60_polyA_position.tsv", sep = "\t", header = TRUE)
+a120_unmod <- read.table(file = "a120_unmod_polyA_position.tsv", sep = "\t", header = TRUE)
+a120_1mod <- read.table(file = "a120_1mod_polyA_position.tsv", sep = "\t", header = TRUE)
+a120_2mod <- read.table(file = "a120_2mod_polyA_position.tsv", sep = "\t", header = TRUE)
+a120_4mod <- read.table(file = "a120_4mod_polyA_position.tsv", sep = "\t", header = TRUE)
 ```
+
+
+### Definér længde af adapteren
+
+```{r}
+a60_unmod["adapter_length"] <- a60_unmod$start - 1
+a60_30["adapter_length"] <- a60_30$start - 1
+a60_60["adapter_length"] <- a60_60$start - 1
+a120_unmod["adapter_length"] <- a120_unmod$start - 1
+a120_1mod["adapter_length"] <- a120_1mod$start - 1
+a120_2mod["adapter_length"] <- a120_2mod$start - 1
+a120_4mod["adapter_length"] <- a120_4mod$start - 1
+```
+
+
+### Histogrammer af alle adapterlængderne
+
+```{r}
+# Liste over alle datasæt
+datasets <- list(
+  a60_unmod, a60_30, a60_60,
+  a120_unmod, a120_1mod, a120_2mod, a120_4mod
+)
+
+# Navne til plot-titler
+titles <- c(
+  "a60_unmod", "a60_30", "a60_60",
+  "a120_unmod", "a120_1mod", "a120_2mod", "a120_4mod"
+)
+
+# Loop gennem alle datasæt og lav histogrammer med tæthedskurve
+for (i in 1:length(datasets)) {
+  hist(datasets[[i]]$adapter_length, 
+       probability = TRUE,  # Normaliser så tæthedskurven passer
+       main = titles[i], 
+       xlab = "Adapter længde",
+       xlim = c(0, 10000),
+       col = "lightblue", 
+       border = "black", 
+       breaks = 100)  # Juster bin-width ved at ændre breaks
+  
+  # Tilføj tæthedskurve
+  lines(density(datasets[[i]]$adapter_length), col = "red", lwd = 2)
+}
+```
+
