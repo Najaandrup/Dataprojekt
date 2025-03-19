@@ -2,7 +2,9 @@
 title: "PolyATails Lengths"
 author: '209509'
 date: "2025-03-19"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -36,9 +38,10 @@ a120_unmod['polyA_length'] <- a120_unmod$end - a120_unmod$start
 ```
 
 
-### Histograms of all the data in each set
+### Histograms of all the data
 
 ```{r}
+# List of loaded datasets and their corresponding names
 datasets <- list(
   a60_30 = a60_30,
   a60_60 = a60_60,
@@ -57,13 +60,38 @@ for (name in names(datasets)) {
        main = paste("Density Plot of polyA Lengths -", name), 
        xlab = "PolyA Length", 
        ylab = "Density", 
-       xlim = c(0, 10000),
+       xlim = c(0, 10000),        
+       ylim = c(0, 0.0020),     
+       border = "black", 
        col = "lightblue",
-       border = "black",         
-       breaks = 100)              
+       breaks = 200)              
   
+  # Add the density line in red
   lines(density(polyA_length), col = "red", lwd = 2)
-}
+  }
 
+```
+
+### Histograms of all the data with log transformation
+
+```{r}
+for (name in names(datasets)) {
+  polyA_length <- datasets[[name]]$polyA_length
+  
+  log_polyA_length <- log10(polyA_length) 
+  
+  hist(log_polyA_length, 
+       probability = TRUE, 
+       main = paste("Density Plot of log-transformed polyA Lengths -", name), 
+       xlab = "Log10(PolyA Length)",
+       ylab = "Density", 
+       border = "black", 
+       col = "lightblue",
+       xlim = c(2.5,4.0),
+       ylim = c(0,10),
+       breaks = 100)                  
+  
+  lines(density(log_polyA_length), col = "red", lwd = 2)
+}
 ```
 
