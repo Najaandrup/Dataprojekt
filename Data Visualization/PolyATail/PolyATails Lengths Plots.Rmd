@@ -2,7 +2,9 @@
 title: "PolyATails Lengths"
 author: '209509'
 date: "2025-03-19"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
