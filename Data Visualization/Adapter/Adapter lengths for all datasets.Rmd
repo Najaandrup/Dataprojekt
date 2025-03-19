@@ -66,4 +66,30 @@ for (name in names(datasets)) {
 ```
 
 
+### Histograms of all the data with log transformation
+
+```{r}
+for (name in names(datasets)) {
+  adapter_length <- datasets[[name]]$adapter_length
+  
+  # Remove values ≤ 0
+  adapter_length <- adapter_length[adapter_length > 0]
+  
+  log_adapter_length <- log10(adapter_length) 
+  
+  hist(log_adapter_length, 
+       probability = TRUE, 
+       main = paste("Density Plot of log-transformed adapter lengths -", name), 
+       xlab = "Log10(Adapter Length)",
+       ylab = "Density", 
+       border = "black", 
+       col = "lightblue",
+       xlim = c(3, 4),
+       ylim = c(0, 7),
+       breaks = 100)                  
+  
+  lines(density(log_adapter_length), col = "red", lwd = 2)
+}
+```
+
 
