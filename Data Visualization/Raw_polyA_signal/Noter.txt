@@ -5,3 +5,8 @@ Inden du skal kører det på clusteret, så skal du huske:
 	matplotlib
 	pod5
 	from matplotlib.backends.backend_pdf import PdfPages (ikke helt sikker)
+
+For at kører det skriver du:
+- Først check at cd er det rigtige (kun på computerens terminal)
+- skriv:
+	python script.py polya_position.tsv polya_reads.pod5 output_name.pdf

@@ -32,7 +32,7 @@ def plot_polyA_signals_to_pdf(df, output_pdf, max_plots=60, max_length=11508):
 
     print(f"Generating PDF: {output_pdf}")
 
-    with PdfPages(output_pdf) as pdf:  # ✅ Now correctly references the class
+    with PdfPages(output_pdf) as pdf:
         for page in range(pages):
             fig, axes = plt.subplots(rows, cols, figsize=(15, 9))
             fig.suptitle(f'PolyA Signals (Page {page+1})', fontsize=16)
