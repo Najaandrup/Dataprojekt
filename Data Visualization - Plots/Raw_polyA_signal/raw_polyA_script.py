@@ -6,25 +6,34 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-def load_and_merge_data(tsv_file, pod_file):
-    """Reads TSV and POD5 files, merging them into a DataFrame."""
+def process_and_plot_data(tsv_file, pod_file, output_pdf, max_plots=60, max_length=11508):
+    # Load and merge data from TSV and POD5 files
     print(f"Reading TSV file: {tsv_file}")
-    polyA_df = pd.read_csv(tsv_file, sep='\t')
+    polyA_df = pd.read_csv(tsv_file, sep='\t', skiprows=1, skipfooter=3, engine='python')
+
+    # Check if 'read_id' is in the TSV file
+    if 'read_id' not in polyA_df.columns:
+        print("Error: 'read_id' column not found in TSV file.")
+        sys.exit(1)
 
     print(f"Reading POD5 file: {pod_file}")
     with p5.Reader(pod_file) as reader:
         pod_data = [(str(read.read_id), read.signal) for read in reader.reads()]
 
     pod_df = pd.DataFrame(pod_data, columns=["read_id", "signal"])
+
+    # Check if 'read_id' is in the POD5 data
+    if 'read_id' not in pod_df.columns:
+        print("Error: 'read_id' column not found in POD5 file.")
+        sys.exit(1)
+
+    # Merge data into a single DataFrame
     merged_df = polyA_df.merge(pod_df, on="read_id")
 
     print(f"Merged DataFrame contains {len(merged_df)} rows.")
-    return merged_df
-
-
-def plot_polyA_signals_to_pdf(df, output_pdf, max_plots=60, max_length=11508):
-    """Plots polyA signals and saves them to a PDF."""
-    num_plots = min(len(df), max_plots)
+    
+    # Plot polyA signals and save to PDF
+    num_plots = min(len(merged_df), max_plots)
     rows, cols = 5, 3  # Number of plots per page
     pages = (num_plots + (rows * cols) - 1) // (rows * cols)
 
@@ -44,7 +53,7 @@ def plot_polyA_signals_to_pdf(df, output_pdf, max_plots=60, max_length=11508):
                     axes[i].axis('off')
                     continue
 
-                signal_slice = df['signal'][idx][df['start'][idx]:df['end'][idx]]
+                signal_slice = merged_df['signal'][idx][merged_df['start'][idx]:merged_df['end'][idx]]
                 max_length_sliced = len(signal_slice)
                 global_max_length = max(global_max_length, max_length_sliced)
 
@@ -83,5 +92,4 @@ if __name__ == '__main__':
         print(f"Error: POD5 file '{pod5_file}' not found.")
         sys.exit(1)
 
-    data = load_and_merge_data(tsv_file, pod5_file)
-    plot_polyA_signals_to_pdf(data, output_pdf, max_plots, max_length)
+    process_and_plot_data(tsv_file, pod5_file, output_pdf, max_plots, max_length)
