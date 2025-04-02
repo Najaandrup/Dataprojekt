@@ -80,7 +80,7 @@ def process_and_plot_data(tsv_file, pod_file, nwindows):
     base_pod_filename = os.path.basename(pod_file).split('_polya_reads')[0]
 
     # Generate the output filename with window size included (e.g., "example_window_10_plot.png")
-    output_filename = f"{base_pod_filename}_window_{nwindows}_plot.png"
+    output_filename = f"{base_pod_filename}_window_{nwindows}_mean_of_middle_50_plot.png"
 
     # Save the plot to the specified location
     plt.savefig(output_filename, dpi=300, bbox_inches='tight')
