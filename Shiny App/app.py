@@ -115,6 +115,14 @@ app_ui = ui.page_sidebar(
 def server(input, output, session):
     
     @reactive.Calc
+    def all_files_uploaded():
+        return (
+            input.tsv_file_mod() and
+            input.pod5_file_mod() and
+            input.tsv_file_ctrl() and
+            input.pod5_file_ctrl()
+        )
+    @reactive.Calc
     def data_mod():
         if not input.tsv_file_mod() or not input.pod5_file_mod():
             return None
@@ -137,6 +145,10 @@ def server(input, output, session):
 
     @render.plot
     def mean_plot():
+        if not all_files_uploaded():
+            print("Waiting for all files to be uploaded.")
+            return
+    
         df_mod = data_mod()
         df_ctrl = data_ctrl()
         idx = input.row_index()
@@ -185,6 +197,10 @@ def server(input, output, session):
 
     @render.plot
     def variance_plot():
+        if not all_files_uploaded():
+            print("Waiting for all files to be uploaded.")
+            return
+
         df_mod = data_mod()
         df_ctrl = data_ctrl()
         idx = input.row_index()
