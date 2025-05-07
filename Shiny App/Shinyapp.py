@@ -145,10 +145,12 @@ def server(input, output, session):
 
     @render.plot
     def mean_plot():
+<<<<<<< HEAD
         if not all_files_uploaded():
             print("Waiting for all files to be uploaded.")
             return
     
+=======
         df_mod = data_mod()
         df_ctrl = data_ctrl()
         idx = input.row_index()
@@ -179,6 +181,64 @@ def server(input, output, session):
             index=idx
         )
 
+        if mean_mod is None or mean_ctrl is None:
+            print("Failed to compute mean vectors.")
+            return
+
+        x_vals = np.arange(len(mean_mod))
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x_vals, mean_mod, label='Mod Mean', color='blue')
+        ax.plot(x_vals, mean_ctrl, label='Ctrl Mean', color='green')
+        ax.set_title("Mean Comparison")
+        ax.set_xlabel("Window Index")
+        ax.set_ylabel("Mean")
+        ax.legend()
+        ax.grid(True)
+        return fig
+
+
+    @render.plot
+    def variance_plot():
+>>>>>>> 86000bc49ed9fda459632fa0795e4bc7e42cca67
+        df_mod = data_mod()
+        df_ctrl = data_ctrl()
+        idx = input.row_index()
+
+        if df_mod is None or df_ctrl is None:
+            print("Missing data.")
+            return
+
+        if idx < 0 or idx >= len(df_mod) or idx >= len(df_ctrl):
+            print("Invalid row index.")
+            return
+
+<<<<<<< HEAD
+        mean_mod, _ = vectorize(
+=======
+        _, var_mod = vectorize(
+>>>>>>> 86000bc49ed9fda459632fa0795e4bc7e42cca67
+            df_mod.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+<<<<<<< HEAD
+        mean_ctrl, _ = vectorize(
+=======
+        _, var_ctrl = vectorize(
+>>>>>>> 86000bc49ed9fda459632fa0795e4bc7e42cca67
+            df_ctrl.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+<<<<<<< HEAD
         if mean_mod is None or mean_ctrl is None:
             print("Failed to compute mean vectors.")
             return
@@ -235,6 +295,12 @@ def server(input, output, session):
             print("Failed to compute variance vectors.")
             return
 
+=======
+        if var_mod is None or var_ctrl is None:
+            print("Failed to compute variance vectors.")
+            return
+
+>>>>>>> 86000bc49ed9fda459632fa0795e4bc7e42cca67
         x_vals = np.arange(len(var_mod))
         fig, ax = plt.subplots(figsize=(10, 5))
         ax.plot(x_vals, var_mod, label='Mod Variance', color='orange')
