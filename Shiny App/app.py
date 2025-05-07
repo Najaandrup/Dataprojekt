@@ -104,7 +104,8 @@ app_ui = ui.page_sidebar(
     ),
     ui.output_plot("mean_plot"),
     ui.output_plot("variance_plot"),
-    ui.output_plot("delta_plot"),
+    ui.output_plot("delta_mean_plot"),
+    ui.output_plot("delta_var_plot"),
     #title="Shiny app!"
 )
 
@@ -249,7 +250,7 @@ def server(input, output, session):
 
 
     @render.plot
-    def delta_plot():
+    def delta_mean_plot():
         if not all_files_uploaded():
             print("Waiting for all files to be uploaded.")
             return
@@ -297,6 +298,57 @@ def server(input, output, session):
         ax.legend()
         ax.grid(True)
         return fig
+    
+    @render.plot
+    def delta_var_plot():
+        if not all_files_uploaded():
+            print("Waiting for all files to be uploaded.")
+            return
+        
+        df_mod = data_mod()
+        df_ctrl = data_ctrl()
+        idx = input.row_index()
+
+        if df_mod is None or df_ctrl is None:
+            print("Missing data.")
+            return
+
+        if idx < 0 or idx >= len(df_mod) or idx >= len(df_ctrl):
+            print("Invalid row index.")
+            return
+
+        _, var_mod = vectorize(
+            df_mod.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+        _, var_ctrl = vectorize(
+            df_ctrl.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+        if var_mod is None or var_ctrl is None:
+            print("Failed to compute variance vectors.")
+            return
+
+        x_vals = np.arange(len(var_mod))
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x_vals, np.array(var_mod) - np.array(var_ctrl), color='blue')
+        ax.set_title("Delta")
+        ax.set_xlabel("Window Index")
+        ax.set_ylabel("Delta Variance")
+        ax.legend()
+        ax.grid(True)
+        return fig
+
 
 
 # ---------------------------------------------------------------------
