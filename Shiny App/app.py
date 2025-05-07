@@ -104,6 +104,7 @@ app_ui = ui.page_sidebar(
     ),
     ui.output_plot("mean_plot"),
     ui.output_plot("variance_plot"),
+    ui.output_plot("delta_plot"),
     #title="Shiny app!"
 )
 
@@ -242,6 +243,57 @@ def server(input, output, session):
         ax.set_title("Variance Comparison")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Variance")
+        ax.legend()
+        ax.grid(True)
+        return fig
+
+
+    @render.plot
+    def delta_plot():
+        if not all_files_uploaded():
+            print("Waiting for all files to be uploaded.")
+            return
+        
+        df_mod = data_mod()
+        df_ctrl = data_ctrl()
+        idx = input.row_index()
+
+        if df_mod is None or df_ctrl is None:
+            print("Missing data.")
+            return
+
+        if idx < 0 or idx >= len(df_mod) or idx >= len(df_ctrl):
+            print("Invalid row index.")
+            return
+
+        mean_mod, _ = vectorize(
+            df_mod.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+        mean_ctrl, _ = vectorize(
+            df_ctrl.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+        if mean_mod is None or mean_ctrl is None:
+            print("Failed to compute mean vectors.")
+            return
+
+        x_vals = np.arange(len(mean_mod))
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x_vals, np.array(mean_mod) - np.array(mean_ctrl), color='blue')
+        ax.set_title("Delta")
+        ax.set_xlabel("Window Index")
+        ax.set_ylabel("Delta Mean")
         ax.legend()
         ax.grid(True)
         return fig
