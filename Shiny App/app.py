@@ -38,54 +38,6 @@ def remove_outliers(signal, threshold, index=None, return_mask=False, original_s
     return filtered_signal if not return_mask else (filtered_signal, mask)
 
 
-#def vectorize_and_plot(row, vector_length, window_size_avg, window_size_var, threshold, index=None):
-#    read_id = row['read_id']
-#    raw_signal = row['signal']
-#    start = row['start']
-#    end = row['end']
-#    signal = raw_signal[start:end]
-#    signal = remove_outliers(signal, threshold, index=index, original_start=start)
-#
-#    first_quantile = int(0.25 * len(signal))
-#    third_quantile = int(0.75 * len(signal))
-#    signal50 = signal[first_quantile:third_quantile]
-#
-#    if len(signal50) == 0 or np.mean(signal50) == 0:
-#        return None, None
-#
-#    signal50_mean = np.mean(signal50)
-#    normalized = signal / signal50_mean
-#
-#    means = []
-#    variations = []
-#
-#    for j in range(vector_length):
-#        x = int(j * (len(signal) / vector_length))
-#
-#        start_avg = max(int(x - window_size_avg // 2), 0)
-#        end_avg = min(int(x + window_size_avg // 2), len(normalized))
-#        window_avg = normalized[start_avg:end_avg]
-#        means.append(np.mean(window_avg) if len(window_avg) > 0 else np.nan)
-#
-#        start_var = max(int(x - window_size_var // 2), 0)
-#        end_var = min(int(x + window_size_var // 2), len(normalized))
-#        window_var = normalized[start_var:end_var]
-#        variations.append(np.var(window_var) if len(window_var) > 0 else np.nan)
-#
-#    x_vals = np.arange(vector_length)
-#
-#    fig, ax = plt.subplots(figsize=(10, 5))
-#    ax.plot(x_vals, means, label='Mean', color='blue')
-#    ax.plot(x_vals, variations, label='Variance', color='orange')
-#    ax.set_title(f"Mean & Variance - Read {read_id}")
-#    ax.set_xlabel("Window Index")
-#    ax.set_ylabel("Value")
-#    ax.grid(True)
-#    ax.legend()
-#
-#    fig.tight_layout()
-#
-#    return fig
 
 def vectorize(row, vector_length, window_size_avg, window_size_var, threshold, index=None):
     raw_signal = row['signal']
@@ -121,8 +73,6 @@ def vectorize(row, vector_length, window_size_avg, window_size_var, threshold, i
         variations.append(np.var(window_var) if len(window_var) > 0 else np.nan)
 
     return means, variations
-
-
 
 
 # ---------------------------------------------------------------------
@@ -184,50 +134,6 @@ def server(input, output, session):
             print(f"Error loading files: {e}")
             return None
         
-
-    #@render.plot
-    #def combined_plot_mod():
-    #    df = data_mod()
-    #    if df is None or input.row_index() < 0 or input.row_index() >= len(df):
-    #        print("No data or invalid row index.")
-    #        return
-#
-    #    fig = vectorize_and_plot(
-    #        df.iloc[input.row_index()],
-    #        vector_length=int(input.vector_size()),
-    #        window_size_avg=int(input.avg_window_size()),
-    #        window_size_var=int(input.var_window_size()),
-    #        threshold=float(input.z_score()),
-    #        index=input.row_index()
-    #    )
-#
-    #    if fig is None:
-    #        print("Plot generation returned None.")
-    #        return
-#
-    #    return fig
-    #
-    #@render.plot
-    #def combined_plot_ctrl():
-    #    df = data_ctrl()
-    #    if df is None or input.row_index() < 0 or input.row_index() >= len(df):
-    #        print("No data or invalid row index.")
-    #        return
-#
-    #    fig = vectorize_and_plot(
-    #        df.iloc[input.row_index()],
-    #        vector_length=int(input.vector_size()),
-    #        window_size_avg=int(input.avg_window_size()),
-    #        window_size_var=int(input.var_window_size()),
-    #        threshold=float(input.z_score()),
-    #        index=input.row_index()
-    #    )
-#
-    #    if fig is None:
-    #        print("Plot generation returned None.")
-    #        return
-#
-    #    return fig
 
     @render.plot
     def mean_plot():
@@ -323,7 +229,6 @@ def server(input, output, session):
         ax.legend()
         ax.grid(True)
         return fig
-
 
 
 # ---------------------------------------------------------------------
