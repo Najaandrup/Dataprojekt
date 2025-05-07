@@ -38,8 +38,8 @@ def remove_outliers(signal, threshold, index=None, return_mask=False, original_s
     return filtered_signal if not return_mask else (filtered_signal, mask)
 
 
-def vectorize_and_plot(row, vector_length, window_size_avg, window_size_var, threshold, index=None):
-    read_id = row['read_id']
+
+def vectorize(row, vector_length, window_size_avg, window_size_var, threshold, index=None):
     raw_signal = row['signal']
     start = row['start']
     end = row['end']
@@ -72,20 +72,7 @@ def vectorize_and_plot(row, vector_length, window_size_avg, window_size_var, thr
         window_var = normalized[start_var:end_var]
         variations.append(np.var(window_var) if len(window_var) > 0 else np.nan)
 
-    x_vals = np.arange(vector_length)
-
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(x_vals, means, label='Mean', color='blue')
-    ax.plot(x_vals, variations, label='Variance', color='orange')
-    ax.set_title(f"Mean & Variance - Read {read_id}")
-    ax.set_xlabel("Window Index")
-    ax.set_ylabel("Value")
-    ax.grid(True)
-    ax.legend()
-
-    fig.tight_layout()
-
-    return fig
+    return means, variations
 
 
 # ---------------------------------------------------------------------
@@ -115,9 +102,9 @@ app_ui = ui.page_sidebar(
             ui.input_file("tsv_file_ctrl", "Upload TSV File", accept=[".tsv"]),
         )
     ),
-    ui.output_plot("combined_plot_mod"),
-    ui.output_plot("combined_plot_ctrl"),
-    title="Add title!"
+    ui.output_plot("mean_plot"),
+    ui.output_plot("variance_plot"),
+    #title="Shiny app!"
 )
 
 
@@ -127,6 +114,14 @@ app_ui = ui.page_sidebar(
 
 def server(input, output, session):
     
+    @reactive.Calc
+    def all_files_uploaded():
+        return (
+            input.tsv_file_mod() and
+            input.pod5_file_mod() and
+            input.tsv_file_ctrl() and
+            input.pod5_file_ctrl()
+        )
     @reactive.Calc
     def data_mod():
         if not input.tsv_file_mod() or not input.pod5_file_mod():
@@ -149,47 +144,106 @@ def server(input, output, session):
         
 
     @render.plot
-    def combined_plot_mod():
-        df = data_mod()
-        if df is None or input.row_index() < 0 or input.row_index() >= len(df):
-            print("No data or invalid row index.")
+    def mean_plot():
+        if not all_files_uploaded():
+            print("Waiting for all files to be uploaded.")
             return
-
-        fig = vectorize_and_plot(
-            df.iloc[input.row_index()],
-            vector_length=int(input.vector_size()),
-            window_size_avg=int(input.avg_window_size()),
-            window_size_var=int(input.var_window_size()),
-            threshold=float(input.z_score()),
-            index=input.row_index()
-        )
-
-        if fig is None:
-            print("Plot generation returned None.")
-            return
-
-        return fig
     
-    @render.plot
-    def combined_plot_ctrl():
-        df = data_ctrl()
-        if df is None or input.row_index() < 0 or input.row_index() >= len(df):
-            print("No data or invalid row index.")
+        df_mod = data_mod()
+        df_ctrl = data_ctrl()
+        idx = input.row_index()
+
+        if df_mod is None or df_ctrl is None:
+            print("Missing data.")
             return
 
-        fig = vectorize_and_plot(
-            df.iloc[input.row_index()],
+        if idx < 0 or idx >= len(df_mod) or idx >= len(df_ctrl):
+            print("Invalid row index.")
+            return
+
+        mean_mod, _ = vectorize(
+            df_mod.iloc[idx],
             vector_length=int(input.vector_size()),
             window_size_avg=int(input.avg_window_size()),
             window_size_var=int(input.var_window_size()),
             threshold=float(input.z_score()),
-            index=input.row_index()
+            index=idx
         )
 
-        if fig is None:
-            print("Plot generation returned None.")
+        mean_ctrl, _ = vectorize(
+            df_ctrl.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+        if mean_mod is None or mean_ctrl is None:
+            print("Failed to compute mean vectors.")
             return
 
+        x_vals = np.arange(len(mean_mod))
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x_vals, mean_mod, label='Mod Mean', color='blue')
+        ax.plot(x_vals, mean_ctrl, label='Ctrl Mean', color='green')
+        ax.set_title("Mean Comparison")
+        ax.set_xlabel("Window Index")
+        ax.set_ylabel("Mean")
+        ax.legend()
+        ax.grid(True)
+        return fig
+
+
+    @render.plot
+    def variance_plot():
+        if not all_files_uploaded():
+            print("Waiting for all files to be uploaded.")
+            return
+
+        df_mod = data_mod()
+        df_ctrl = data_ctrl()
+        idx = input.row_index()
+
+        if df_mod is None or df_ctrl is None:
+            print("Missing data.")
+            return
+
+        if idx < 0 or idx >= len(df_mod) or idx >= len(df_ctrl):
+            print("Invalid row index.")
+            return
+
+        _, var_mod = vectorize(
+            df_mod.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+        _, var_ctrl = vectorize(
+            df_ctrl.iloc[idx],
+            vector_length=int(input.vector_size()),
+            window_size_avg=int(input.avg_window_size()),
+            window_size_var=int(input.var_window_size()),
+            threshold=float(input.z_score()),
+            index=idx
+        )
+
+        if var_mod is None or var_ctrl is None:
+            print("Failed to compute variance vectors.")
+            return
+
+        x_vals = np.arange(len(var_mod))
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(x_vals, var_mod, label='Mod Variance', color='orange')
+        ax.plot(x_vals, var_ctrl, label='Ctrl Variance', color='red')
+        ax.set_title("Variance Comparison")
+        ax.set_xlabel("Window Index")
+        ax.set_ylabel("Variance")
+        ax.legend()
+        ax.grid(True)
         return fig
 
 
