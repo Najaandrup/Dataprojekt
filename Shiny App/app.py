@@ -81,13 +81,11 @@ def vectorize(row, vector_length, window_size_avg, window_size_var, threshold, i
 
 app_ui = ui.page_sidebar(
     ui.sidebar(
-        #ui.input_slider("vector_size", "Vector size slider", 30, 960, value=30, step=30),
-        ui.input_select("vector_size", "Vector size selector", choices=[30, 60, 120, 240, 480, 960]),
+        ui.input_select("vector_size", "Vector size selector", choices=[30, 60, 120, 240, 480, 960], selected=60),
         ui.h5("Window sizes"),
-        ui.input_selectize("avg_window_size", "Average Window Size", choices=[2, 5, 10, 20, 30, 60]),
-        ui.input_selectize("var_window_size", "Variance Window Size", choices=[5, 10, 20, 30, 60, 120]),
-        #ui.input_radio_buttons("z_score", "z-score", {"z-score 3": "3", "z-score 4": "4", "z-score 5": "5"}),
-        ui.input_slider("z_score", "Z-score", 1, 6, 1),
+        ui.input_select("avg_window_size", "Average Window Size", choices=[2, 5, 10, 20, 30, 60], selected=60),
+        ui.input_select("var_window_size", "Variance Window Size", choices=[5, 10, 20, 30, 60, 120], selected=120),
+        ui.input_slider("z_score", "Z-score", 1, 6, 3),
         ui.input_numeric("row_index", "Row index", value=0, min=0)
     ),
     ui.layout_columns(
@@ -104,6 +102,7 @@ app_ui = ui.page_sidebar(
     ),
     ui.output_plot("mean_plot"),
     ui.output_plot("variance_plot"),
+    ui.output_plot("raw_signal_plot"),
     ui.output_plot("delta_mean_plot"),
     ui.output_plot("delta_var_plot"),
     #title="Shiny app!"
@@ -124,6 +123,7 @@ def server(input, output, session):
             input.tsv_file_ctrl() and
             input.pod5_file_ctrl()
         )
+    
     @reactive.Calc
     def data_mod():
         if not input.tsv_file_mod() or not input.pod5_file_mod():
@@ -134,6 +134,7 @@ def server(input, output, session):
             print(f"Error loading files: {e}")
             return None
     
+
     @reactive.Calc
     def data_ctrl():
         if not input.tsv_file_ctrl() or not input.pod5_file_ctrl():
@@ -192,7 +193,7 @@ def server(input, output, session):
         ax.set_title("Mean Comparison")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Mean")
-        ax.legend()
+        ax.legend(loc='upper right')
         ax.grid(True)
         return fig
 
@@ -244,8 +245,78 @@ def server(input, output, session):
         ax.set_title("Variance Comparison")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Variance")
-        ax.legend()
+        ax.legend(loc='upper right')
         ax.grid(True)
+        return fig
+
+    @render.plot
+    def raw_signal_plot():
+        if not all_files_uploaded():
+            print("Waiting for all files to be uploaded.")
+            return
+
+        df_mod = data_mod()
+        df_ctrl = data_ctrl()
+        idx = input.row_index()
+
+        if (
+            df_mod is None or df_ctrl is None or
+            idx < 0 or idx >= len(df_mod) or idx >= len(df_ctrl)
+        ):
+            print("Invalid or missing data.")
+            return
+
+        # Modification data
+        row_mod = df_mod.iloc[idx]
+        raw_signal_mod = row_mod['signal']
+        start_mod = row_mod['start']
+        end_mod = row_mod['end']
+        signal_mod = raw_signal_mod[start_mod:end_mod]
+
+        filtered_signal_mod, mask_mod = remove_outliers(signal_mod, float(input.z_score()), index=idx, return_mask=True, original_start=start_mod)
+
+        indices_mod = np.arange(start_mod, end_mod)
+        filtered_indices_mod = indices_mod[mask_mod]
+
+        # Control data
+        row_ctrl = df_ctrl.iloc[idx]
+        raw_signal_ctrl = row_ctrl['signal']
+        start_ctrl = row_ctrl['start']
+        end_ctrl = row_ctrl['end']
+        signal_ctrl = raw_signal_ctrl[start_ctrl:end_ctrl]
+
+        filtered_signal_ctrl, mask_ctrl = remove_outliers(signal_ctrl, float(input.z_score()), index=idx, return_mask=True, original_start=start_ctrl)
+
+        indices_ctrl = np.arange(start_ctrl, end_ctrl)
+        filtered_indices_ctrl = indices_ctrl[mask_ctrl]
+
+        # Plotting
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+
+        y_min = min(np.min(signal_mod), np.min(filtered_signal_mod),
+                    np.min(signal_ctrl), np.min(filtered_signal_ctrl))
+        y_max = max(np.max(signal_mod), np.max(filtered_signal_mod),
+                    np.max(signal_ctrl), np.max(filtered_signal_ctrl))
+
+        ax1.plot(indices_mod, signal_mod, label='Mod raw', color='gray')
+        ax1.plot(filtered_indices_mod, filtered_signal_mod, label='Mod filtered', color='red', alpha=0.7)
+        ax1.set_title('Raw Signal - MOD')
+        ax1.set_xlabel('Index')
+        ax1.set_ylabel('Signal')
+        ax1.set_ylim(y_min, y_max)
+        ax1.grid(True)
+        ax1.legend(loc='upper right')
+
+        ax2.plot(indices_ctrl, signal_ctrl, label='Ctrl raw', color='gray')
+        ax2.plot(filtered_indices_ctrl, filtered_signal_ctrl, label='Ctrl filtered', color='blue', alpha=0.7)
+        ax2.set_title('Raw Signal - CTRL')
+        ax2.set_xlabel('Index')
+        ax2.set_ylabel('Signal')
+        ax2.set_ylim(y_min, y_max)
+        ax2.grid(True)
+        ax2.legend(loc='upper right')
+
+        fig.tight_layout()
         return fig
 
 
@@ -295,7 +366,7 @@ def server(input, output, session):
         ax.set_title("Delta")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Delta Mean")
-        ax.legend()
+        ax.legend(loc='upper right')
         ax.grid(True)
         return fig
     
@@ -345,7 +416,7 @@ def server(input, output, session):
         ax.set_title("Delta")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Delta Variance")
-        ax.legend()
+        ax.legend(loc='upper right')
         ax.grid(True)
         return fig
 
