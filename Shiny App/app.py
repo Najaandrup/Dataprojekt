@@ -22,7 +22,7 @@ def load_data(tsv_file, pod_file):
     return polyA_df
 
 
-def remove_outliers(signal, threshold, index=None, return_mask=False, original_start=0):
+def remove_outliers(signal, threshold, index=None, return_mask=False):
     mean = np.mean(signal)
     std = np.std(signal)
     
@@ -38,13 +38,12 @@ def remove_outliers(signal, threshold, index=None, return_mask=False, original_s
     return filtered_signal if not return_mask else (filtered_signal, mask)
 
 
-
 def vectorize(row, vector_length, window_size_avg, window_size_var, threshold, index=None):
     raw_signal = row['signal']
     start = row['start']
     end = row['end']
     signal = raw_signal[start:end]
-    signal = remove_outliers(signal, threshold, index=index, original_start=start)
+    signal = remove_outliers(signal, threshold, index=index)
 
     first_quantile = int(0.25 * len(signal))
     third_quantile = int(0.75 * len(signal))
@@ -273,7 +272,7 @@ def server(input, output, session):
         end_mod = row_mod['end']
         signal_mod = raw_signal_mod[start_mod:end_mod]
 
-        filtered_signal_mod, mask_mod = remove_outliers(signal_mod, float(input.z_score()), index=idx, return_mask=True, original_start=start_mod)
+        filtered_signal_mod, mask_mod = remove_outliers(signal_mod, float(input.z_score()), index=idx, return_mask=True)
 
         indices_mod = np.arange(start_mod, end_mod)
         filtered_indices_mod = indices_mod[mask_mod]
@@ -285,7 +284,7 @@ def server(input, output, session):
         end_ctrl = row_ctrl['end']
         signal_ctrl = raw_signal_ctrl[start_ctrl:end_ctrl]
 
-        filtered_signal_ctrl, mask_ctrl = remove_outliers(signal_ctrl, float(input.z_score()), index=idx, return_mask=True, original_start=start_ctrl)
+        filtered_signal_ctrl, mask_ctrl = remove_outliers(signal_ctrl, float(input.z_score()), index=idx, return_mask=True)
 
         indices_ctrl = np.arange(start_ctrl, end_ctrl)
         filtered_indices_ctrl = indices_ctrl[mask_ctrl]
@@ -298,8 +297,8 @@ def server(input, output, session):
         y_max = max(np.max(signal_mod), np.max(filtered_signal_mod),
                     np.max(signal_ctrl), np.max(filtered_signal_ctrl))
 
-        ax1.plot(indices_mod, signal_mod, label='Mod raw', color='gray')
-        ax1.plot(filtered_indices_mod, filtered_signal_mod, label='Mod filtered', color='red', alpha=0.7)
+        ax1.plot(indices_mod, signal_mod, label='Mod raw', color='gray', alpha=0.7)
+        ax1.plot(filtered_indices_mod, filtered_signal_mod, label='Mod filtered', color='red', alpha=0.5)
         ax1.set_title('Raw Signal - MOD')
         ax1.set_xlabel('Index')
         ax1.set_ylabel('Signal')
@@ -307,8 +306,8 @@ def server(input, output, session):
         ax1.grid(True)
         ax1.legend(loc='upper right')
 
-        ax2.plot(indices_ctrl, signal_ctrl, label='Ctrl raw', color='gray')
-        ax2.plot(filtered_indices_ctrl, filtered_signal_ctrl, label='Ctrl filtered', color='blue', alpha=0.7)
+        ax2.plot(indices_ctrl, signal_ctrl, label='Ctrl raw', color='gray', alpha=0.7)
+        ax2.plot(filtered_indices_ctrl, filtered_signal_ctrl, label='Ctrl filtered', color='blue', alpha=0.5)
         ax2.set_title('Raw Signal - CTRL')
         ax2.set_xlabel('Index')
         ax2.set_ylabel('Signal')
@@ -366,7 +365,6 @@ def server(input, output, session):
         ax.set_title("Delta")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Delta Mean")
-        ax.legend(loc='upper right')
         ax.grid(True)
         return fig
     
@@ -416,10 +414,8 @@ def server(input, output, session):
         ax.set_title("Delta")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Delta Variance")
-        ax.legend(loc='upper right')
         ax.grid(True)
         return fig
-
 
 
 # ---------------------------------------------------------------------
