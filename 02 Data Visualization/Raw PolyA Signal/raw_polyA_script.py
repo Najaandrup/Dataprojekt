@@ -60,8 +60,8 @@ def process_and_plot_data(tsv_file, pod_file, output_pdf, max_plots=60, max_leng
 
                 axes[plot_count].plot(signal_slice)
                 axes[plot_count].set_title(f'Row {valid_idx + 1}')
-                axes[plot_count].set_xlim(0, max_length)
-                axes[plot_count].set_ylim(-10, 1000)
+                axes[plot_count].set_xlim(-10, max_length)
+                axes[plot_count].set_ylim(300, 700)
 
                 plot_count += 1
                 valid_idx += 1
