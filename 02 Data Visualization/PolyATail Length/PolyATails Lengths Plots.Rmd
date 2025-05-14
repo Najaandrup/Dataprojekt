@@ -41,7 +41,6 @@ a120_unmod['polyA_length'] <- a120_unmod$end - a120_unmod$start
 ### Histograms of all the data
 
 ```{r}
-# List of loaded datasets and their corresponding names
 datasets <- list(
   a60_30 = a60_30,
   a60_60 = a60_60,
