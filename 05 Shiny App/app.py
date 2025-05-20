@@ -85,7 +85,7 @@ app_ui = ui.page_sidebar(
         ui.input_select("avg_window_size", "Average Window Size", choices=[2, 5, 10, 20, 30, 60], selected=60),
         ui.input_select("var_window_size", "Variance Window Size", choices=[5, 10, 20, 30, 60, 120], selected=120),
         ui.input_slider("z_score", "Z-score", 1, 6, 3),
-        ui.input_selectize("row_indices_mod", "Select Mod Row(s)", choices=[str(i) for i in range(11)], multiple=True, selected=["0"]),
+        ui.input_selectize("row_indices_mod", "Select Mod Row(s)", choices=[str(i) for i in range(11)], multiple=True, selected=["0"]), 
         ui.input_numeric("row_index_ctrl", "Select Ctrl Row", value=0, min=0)
     ),
     ui.layout_columns(
