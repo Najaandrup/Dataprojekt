@@ -85,8 +85,9 @@ app_ui = ui.page_sidebar(
         ui.input_select("avg_window_size", "Average Window Size", choices=[2, 5, 10, 20, 30, 60], selected=60),
         ui.input_select("var_window_size", "Variance Window Size", choices=[5, 10, 20, 30, 60, 120], selected=120),
         ui.input_slider("z_score", "Z-score", 1, 6, 3),
-        ui.input_selectize("row_indices_mod", "Select Mod Row(s)", choices=[str(i) for i in range(11)], multiple=True, selected=["0"]), 
-        ui.input_numeric("row_index_ctrl", "Select Ctrl Row", value=0, min=0)
+        ui.input_text("text", "Select Mod Row(s) (Use comma seperation)", "0,1"),  
+        ui.input_numeric("row_index_ctrl", "Select Ctrl Row", value=0, min=0),
+        ui.input_numeric("raw_mod_row", "Select Single Mod Row for Raw Signal Plot", value=0, min=0),
     ),
     ui.layout_columns(
         ui.panel_well(
@@ -114,6 +115,12 @@ app_ui = ui.page_sidebar(
 
 def server(input, output, session):
     
+    def parse_indices(text):
+        """Parse comma-separated string into list of ints, ignoring invalid entries."""
+        if not text:
+            return []
+        return [int(x.strip()) for x in text.split(',') if x.strip().isdigit()]
+
     @reactive.Calc
     def all_files_uploaded():
         return (
@@ -158,7 +165,7 @@ def server(input, output, session):
             print("Missing data.")
             return
         
-        indices_mod = [int(i) for i in input.row_indices_mod()]
+        indices_mod = parse_indices(input.text())
         idx_ctrl = int(input.row_index_ctrl())
 
         if not indices_mod:
@@ -169,7 +176,6 @@ def server(input, output, session):
             print("Invalid ctrl row index.")
             return
         
-        # Compute control mean vector once
         mean_ctrl, _ = vectorize(
                 df_ctrl.iloc[idx_ctrl],
                 vector_length=int(input.vector_size()),
@@ -196,7 +202,7 @@ def server(input, output, session):
 
             if mean_mod is not None:
                 x_vals = np.arange(len(mean_mod))
-                ax.plot(x_vals, mean_mod, label=f'Mod Mean {idx_mod}', alpha=0.7) # , color='blue'
+                ax.plot(x_vals, mean_mod, label=f'Mod Mean {idx_mod}', alpha=0.7)
         
         if mean_ctrl is not None:
             x_vals = np.arange(len(mean_ctrl))
@@ -223,7 +229,7 @@ def server(input, output, session):
             print("Missing data.")
             return
         
-        indices_mod = [int(i) for i in input.row_indices_mod()]
+        indices_mod = parse_indices(input.text())
         idx_ctrl = int(input.row_index_ctrl())
 
         if not indices_mod:
@@ -234,7 +240,7 @@ def server(input, output, session):
             print("Invalid ctrl row index.")
             return
 
-        # Compute control variance vector once
+    
         _, var_ctrl = vectorize(
             df_ctrl.iloc[idx_ctrl],
             vector_length=int(input.vector_size()),
@@ -262,7 +268,7 @@ def server(input, output, session):
             if var_mod is not None:
                 x_vals = np.arange(len(var_mod))
                 ax.plot(x_vals, var_mod, label=f'Mod Var {idx_mod}', alpha=0.7)
-
+        
         if var_ctrl is not None:
             x_vals = np.arange(len(var_ctrl))
             ax.plot(x_vals, var_ctrl, label='Ctrl Var', color='black')
@@ -273,6 +279,7 @@ def server(input, output, session):
         ax.legend(loc='upper right')
         ax.grid(True)
         return fig
+
 
     @render.plot
     def raw_signal_plot():
@@ -287,14 +294,13 @@ def server(input, output, session):
             print("Missing data.")
             return
 
-        idx_mod = int(input.row_indices_mod()[0])
+        idx_mod = int(input.raw_mod_row())
         idx_ctrl = int(input.row_index_ctrl())
 
         if (idx_mod < 0 or idx_mod >= len(df_mod) or idx_ctrl < 0 or idx_ctrl >= len(df_ctrl)):
             print("Index out of bounds.")
             return
 
-        # Modification data
         row_mod = df_mod.iloc[idx_mod]
         raw_signal_mod = row_mod['signal']
         start_mod = row_mod['start']
@@ -303,10 +309,9 @@ def server(input, output, session):
 
         filtered_signal_mod, mask_mod = remove_outliers(signal_mod, float(input.z_score()), index=idx_mod, return_mask=True)
 
-        indices_mod = np.arange(start_mod, end_mod)
-        filtered_indices_mod = indices_mod[mask_mod]
+        indices_mod_signal = np.arange(start_mod, end_mod)
+        filtered_indices_mod = indices_mod_signal[mask_mod]
 
-        # Control data
         row_ctrl = df_ctrl.iloc[idx_ctrl]
         raw_signal_ctrl = row_ctrl['signal']
         start_ctrl = row_ctrl['start']
@@ -315,10 +320,9 @@ def server(input, output, session):
 
         filtered_signal_ctrl, mask_ctrl = remove_outliers(signal_ctrl, float(input.z_score()), index=idx_ctrl, return_mask=True)
 
-        indices_ctrl = np.arange(start_ctrl, end_ctrl)
-        filtered_indices_ctrl = indices_ctrl[mask_ctrl]
+        indices_ctrl_signal = np.arange(start_ctrl, end_ctrl)
+        filtered_indices_ctrl = indices_ctrl_signal[mask_ctrl]
 
-        # Plotting
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 
         y_min = min(np.min(signal_mod), np.min(filtered_signal_mod),
@@ -326,18 +330,18 @@ def server(input, output, session):
         y_max = max(np.max(signal_mod), np.max(filtered_signal_mod),
                     np.max(signal_ctrl), np.max(filtered_signal_ctrl))
 
-        ax1.plot(indices_mod, signal_mod, label='Mod raw', color='gray', alpha=0.7)
+        ax1.plot(indices_mod_signal, signal_mod, label='Mod raw', color='gray', alpha=0.7)
         ax1.plot(filtered_indices_mod, filtered_signal_mod, label='Mod filtered', color='red', alpha=0.5)
-        ax1.set_title('Raw Signal Mod')
+        ax1.set_title(f'Raw Signal Mod (Row {idx_mod})')
         ax1.set_xlabel('Index')
         ax1.set_ylabel('Signal')
         ax1.set_ylim(y_min, y_max)
         ax1.grid(True)
         ax1.legend(loc='upper right')
 
-        ax2.plot(indices_ctrl, signal_ctrl, label='Ctrl raw', color='gray', alpha=0.7)
+        ax2.plot(indices_ctrl_signal, signal_ctrl, label='Ctrl raw', color='gray', alpha=0.7)
         ax2.plot(filtered_indices_ctrl, filtered_signal_ctrl, label='Ctrl filtered', color='blue', alpha=0.5)
-        ax2.set_title('Raw Signal Ctrl')
+        ax2.set_title(f'Raw Signal Ctrl (Row {idx_ctrl})')
         ax2.set_xlabel('Index')
         ax2.set_ylabel('Signal')
         ax2.set_ylim(y_min, y_max)
@@ -360,8 +364,8 @@ def server(input, output, session):
         if df_mod is None or df_ctrl is None:
             print("Missing data.")
             return
-
-        indices_mod = [int(i) for i in input.row_indices_mod()]
+        
+        indices_mod = parse_indices(input.text())
         idx_ctrl = int(input.row_index_ctrl())
 
         if not indices_mod:
@@ -372,7 +376,7 @@ def server(input, output, session):
             print("Invalid ctrl row index.")
             return
 
-        mean_ctrl, _ = vectorize(
+        _, mean_ctrl = vectorize(
             df_ctrl.iloc[idx_ctrl],
             vector_length=int(input.vector_size()),
             window_size_avg=int(input.avg_window_size()),
@@ -387,7 +391,7 @@ def server(input, output, session):
             if idx_mod < 0 or idx_mod >= len(df_mod):
                 continue
 
-            mean_mod, _ = vectorize(
+            _, mean_mod = vectorize(
                 df_mod.iloc[idx_mod],
                 vector_length=int(input.vector_size()),
                 window_size_avg=int(input.avg_window_size()),
@@ -397,16 +401,17 @@ def server(input, output, session):
             )
 
             if mean_mod is not None and mean_ctrl is not None:
-                delta = np.array(mean_mod) - np.array(mean_ctrl)
-                x_vals = np.arange(len(delta))
-                ax.plot(x_vals, delta, label=f'Delta Mean {idx_mod}', alpha=0.7)
+                delta_mean = np.array(mean_mod) - np.array(mean_ctrl)
+                x_vals = np.arange(len(delta_mean))
+                ax.plot(x_vals, delta_mean, label=f'Delta Mean {idx_mod}', alpha=0.7)
 
-        ax.set_title("Delta Mean Comparison")
+        ax.set_title("Delta Mean (Mod - Ctrl)")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Delta Mean")
         ax.legend(loc='upper right')
         ax.grid(True)
         return fig
+
 
     @render.plot
     def delta_var_plot():
@@ -420,8 +425,8 @@ def server(input, output, session):
         if df_mod is None or df_ctrl is None:
             print("Missing data.")
             return
-
-        indices_mod = [int(i) for i in input.row_indices_mod()]
+        
+        indices_mod = parse_indices(input.text())
         idx_ctrl = int(input.row_index_ctrl())
 
         if not indices_mod:
@@ -457,20 +462,16 @@ def server(input, output, session):
             )
 
             if var_mod is not None and var_ctrl is not None:
-                delta = np.array(var_mod) - np.array(var_ctrl)
-                x_vals = np.arange(len(delta))
-                ax.plot(x_vals, delta, label=f'Delta Var {idx_mod}', alpha=0.7)
+                delta_var = np.array(var_mod) - np.array(var_ctrl)
+                x_vals = np.arange(len(delta_var))
+                ax.plot(x_vals, delta_var, label=f'Delta Var {idx_mod}', alpha=0.7)
 
-        ax.set_title("Delta Variance Comparison")
+        ax.set_title("Delta Variance (Mod - Ctrl)")
         ax.set_xlabel("Window Index")
         ax.set_ylabel("Delta Variance")
         ax.legend(loc='upper right')
         ax.grid(True)
         return fig
 
-
-# ---------------------------------------------------------------------
-# Launch App
-# ---------------------------------------------------------------------
 
 app = App(app_ui, server)
