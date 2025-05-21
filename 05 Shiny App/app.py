@@ -323,7 +323,7 @@ def server(input, output, session):
         indices_ctrl_signal = np.arange(start_ctrl, end_ctrl)
         filtered_indices_ctrl = indices_ctrl_signal[mask_ctrl]
 
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 4))
 
         y_min = min(np.min(signal_mod), np.min(filtered_signal_mod),
                     np.min(signal_ctrl), np.min(filtered_signal_ctrl))
@@ -333,8 +333,8 @@ def server(input, output, session):
         ax1.plot(indices_mod_signal, signal_mod, label='Mod raw', color='gray', alpha=0.7)
         ax1.plot(filtered_indices_mod, filtered_signal_mod, label='Mod filtered', color='red', alpha=0.5)
         ax1.set_title(f'Raw Signal Mod (Row {idx_mod})')
-        ax1.set_xlabel('Index')
-        ax1.set_ylabel('Signal')
+        ax1.set_xlabel('Sample Index')
+        ax1.set_ylabel('Current (pA)')
         ax1.set_ylim(y_min, y_max)
         ax1.grid(True)
         ax1.legend(loc='upper right')
@@ -342,8 +342,8 @@ def server(input, output, session):
         ax2.plot(indices_ctrl_signal, signal_ctrl, label='Ctrl raw', color='gray', alpha=0.7)
         ax2.plot(filtered_indices_ctrl, filtered_signal_ctrl, label='Ctrl filtered', color='blue', alpha=0.5)
         ax2.set_title(f'Raw Signal Ctrl (Row {idx_ctrl})')
-        ax2.set_xlabel('Index')
-        ax2.set_ylabel('Signal')
+        ax2.set_xlabel('Sample Index')
+        ax2.set_ylabel('Current (pA)')
         ax2.set_ylim(y_min, y_max)
         ax2.grid(True)
         ax2.legend(loc='upper right')
