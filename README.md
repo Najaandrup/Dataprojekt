@@ -1,7 +1,23 @@
 # RNA-modifikationer i polyA-haler med Nanopore-sekventering (og machine learning)
 
 ### Vejledning til læsning af Github:
--  02 Data Visualization
-    - Raw PolyA Signal:
-          - raw_polyA_signals_a60_60.pdf
-          - raw_polyA_signals_a60_unmod.pdf
+- Læs Projektbeskrivelse.pdf 
+
+-  Mappen: 02 Data Visualization
+    - Raw PolyA Signal: raw_polyA_signals_a60_60.pdf & raw_polyA_signals_a60_unmod.pdf
+    - (PolyATail Length: PolyATails_Lengths_Plots.pdf (burde omdøbes))
+ 
+- Mappen: 03 Vectorization
+    - Vectorization_median_plots.pdf (kig på a60_60 og a60_unmod)
+ 
+- Mappen: 04 Moving Vectorization
+    - a60_60_mean_plots.pdf
+    - a60_60_var_plots.pdf
+    - a60_unmod_mean_plots.pdf
+    - a60_unmod_var_plots.pdf
+    - Outliers fjernelse og plot af ét signal.ipynb
+    - (Tilføj kommentar ala: *De øverste fire er det samme som den nederste blot for hele sættet, hvor den bruger gennemsnit og std*)
+ 
+- Mappen: 05 Shiny App
+    - *Billeder og videoer af shiny app i brug*
+    - *Evt kode*
