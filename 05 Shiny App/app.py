@@ -22,13 +22,11 @@ def load_data(tsv_file, pod_file):
     return polyA_df
 
 
-def remove_outliers(signal, threshold, index=None, return_mask=False):
+def remove_outliers(signal, threshold, return_mask=False):
     mean = np.mean(signal)
     std = np.std(signal)
     
     if std == 0:
-        if index is not None:
-            print(f"Row {index}: Standard deviation is 0, no outliers removed.")
         return signal if not return_mask else (signal, np.full(len(signal), True))
 
     z_scores = np.abs((signal - mean) / std)
@@ -38,12 +36,12 @@ def remove_outliers(signal, threshold, index=None, return_mask=False):
     return filtered_signal if not return_mask else (filtered_signal, mask)
 
 
-def vectorize(row, vector_length, window_size_avg, window_size_var, threshold, index=None):
+def vectorize(row, vector_length, window_size_avg, window_size_var, threshold):
     raw_signal = row['signal']
     start = row['start']
     end = row['end']
     signal = raw_signal[start:end]
-    signal = remove_outliers(signal, threshold, index=index)
+    signal = remove_outliers(signal, threshold)
 
     first_quantile = int(0.25 * len(signal))
     third_quantile = int(0.75 * len(signal))
@@ -181,8 +179,7 @@ def server(input, output, session):
                 vector_length=int(input.vector_size()),
                 window_size_avg=int(input.avg_window_size()),
                 window_size_var=int(input.var_window_size()),
-                threshold=float(input.z_score()),
-                index=idx_ctrl
+                threshold=float(input.z_score())
             )
 
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -196,8 +193,7 @@ def server(input, output, session):
                 vector_length=int(input.vector_size()),
                 window_size_avg=int(input.avg_window_size()),
                 window_size_var=int(input.var_window_size()),
-                threshold=float(input.z_score()),
-                index=idx_mod
+                threshold=float(input.z_score())
             )
 
             if mean_mod is not None:
@@ -246,8 +242,7 @@ def server(input, output, session):
             vector_length=int(input.vector_size()),
             window_size_avg=int(input.avg_window_size()),
             window_size_var=int(input.var_window_size()),
-            threshold=float(input.z_score()),
-            index=idx_ctrl
+            threshold=float(input.z_score())
         )
 
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -261,8 +256,7 @@ def server(input, output, session):
                 vector_length=int(input.vector_size()),
                 window_size_avg=int(input.avg_window_size()),
                 window_size_var=int(input.var_window_size()),
-                threshold=float(input.z_score()),
-                index=idx_mod
+                threshold=float(input.z_score())
             )
 
             if var_mod is not None:
@@ -307,7 +301,7 @@ def server(input, output, session):
         end_mod = row_mod['end']
         signal_mod = raw_signal_mod[start_mod:end_mod]
 
-        filtered_signal_mod, mask_mod = remove_outliers(signal_mod, float(input.z_score()), index=idx_mod, return_mask=True)
+        filtered_signal_mod, mask_mod = remove_outliers(signal_mod, float(input.z_score()), return_mask=True)
 
         indices_mod_signal = np.arange(start_mod, end_mod)
         filtered_indices_mod = indices_mod_signal[mask_mod]
@@ -318,7 +312,7 @@ def server(input, output, session):
         end_ctrl = row_ctrl['end']
         signal_ctrl = raw_signal_ctrl[start_ctrl:end_ctrl]
 
-        filtered_signal_ctrl, mask_ctrl = remove_outliers(signal_ctrl, float(input.z_score()), index=idx_ctrl, return_mask=True)
+        filtered_signal_ctrl, mask_ctrl = remove_outliers(signal_ctrl, float(input.z_score()), return_mask=True)
 
         indices_ctrl_signal = np.arange(start_ctrl, end_ctrl)
         filtered_indices_ctrl = indices_ctrl_signal[mask_ctrl]
@@ -381,8 +375,7 @@ def server(input, output, session):
             vector_length=int(input.vector_size()),
             window_size_avg=int(input.avg_window_size()),
             window_size_var=int(input.var_window_size()),
-            threshold=float(input.z_score()),
-            index=idx_ctrl
+            threshold=float(input.z_score())
         )
 
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -396,8 +389,7 @@ def server(input, output, session):
                 vector_length=int(input.vector_size()),
                 window_size_avg=int(input.avg_window_size()),
                 window_size_var=int(input.var_window_size()),
-                threshold=float(input.z_score()),
-                index=idx_mod
+                threshold=float(input.z_score())
             )
 
             if mean_mod is not None and mean_ctrl is not None:
@@ -442,8 +434,7 @@ def server(input, output, session):
             vector_length=int(input.vector_size()),
             window_size_avg=int(input.avg_window_size()),
             window_size_var=int(input.var_window_size()),
-            threshold=float(input.z_score()),
-            index=idx_ctrl
+            threshold=float(input.z_score())
         )
 
         fig, ax = plt.subplots(figsize=(10, 5))
@@ -457,8 +448,7 @@ def server(input, output, session):
                 vector_length=int(input.vector_size()),
                 window_size_avg=int(input.avg_window_size()),
                 window_size_var=int(input.var_window_size()),
-                threshold=float(input.z_score()),
-                index=idx_mod
+                threshold=float(input.z_score())
             )
 
             if var_mod is not None and var_ctrl is not None:
