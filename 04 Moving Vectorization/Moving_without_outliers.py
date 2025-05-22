@@ -14,11 +14,11 @@ def remove_outliers(signal, threshold):
     return signal[z_scores < threshold]  # returns signal if z-score is below the threshold
 
 def vectorize_and_plot(tsv_file, pod_file, vector_length, window_size_avg, window_size_var, threshold):
-    # Load position data
+    # Load data from tsv file
     polyA_df = pd.read_csv(tsv_file, sep='\t', skiprows=1, skipfooter=3, engine='python')
     polyA_df.columns = polyA_df.columns.str.strip()  # Fix possible whitespace in headers
 
-    # Load signal data from pod5 file
+    # Load data from pod5 file
     with p5.Reader(pod_file) as reader:
         pod_data = [(str(read.read_id), read.signal) for read in reader.reads()]
     pod_df = pd.DataFrame(pod_data, columns=["read_id", "signal"])
