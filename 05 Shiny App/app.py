@@ -10,13 +10,18 @@ import pod5 as p5
 # ---------------------------------------------------------------------
 
 def load_data(tsv_file, pod_file):
+    # Load data from tsv-file
     polyA_df = pd.read_csv(tsv_file, sep='\t', skiprows=1, skipfooter=3, engine='python')
-    polyA_df.columns = polyA_df.columns.str.strip()
+    polyA_df.columns = polyA_df.columns.str.strip()  # Fix possible whitespace in headers
 
+    # Load data from pod5-file
     with p5.Reader(pod_file) as reader:
         pod_data = {str(read.read_id): read.signal for read in reader.reads()}
 
-    polyA_df['signal'] = polyA_df['read_id'].map(pod_data)
+    # Adds pod5 data to dataframe by read_ids
+    polyA_df['signal'] = polyA_df['read_id'].map(pod_data)  # Adds NaN if read_id not found in pod data
+    
+    # Removes NaNs from dataframe if there is any
     polyA_df.dropna(subset=['signal'], inplace=True)
 
     return polyA_df
@@ -27,12 +32,16 @@ def remove_outliers(signal, threshold, return_mask=False):
     std = np.std(signal)
     
     if std == 0:
+        # If std is 0 nothing is an outlier and the signal will be returned
+        # If return_mask = True, the signal and a boolean array of outlier status is returned
         return signal if not return_mask else (signal, np.full(len(signal), True))
 
     z_scores = np.abs((signal - mean) / std)
-    mask = z_scores < threshold
-    filtered_signal = signal[mask]
+    mask = z_scores < threshold  # returns True if value if z-score is below the threshold
+    filtered_signal = signal[mask]  # returns signal where mask is True (signal without outliers)
 
+    # Returns filtered signal if return_mask = False
+    # Returns filtered signal and a boolean array of outlier status for original data if return_mask = True
     return filtered_signal if not return_mask else (filtered_signal, mask)
 
 
@@ -40,36 +49,59 @@ def vectorize(row, vector_length, window_size_avg, window_size_var, threshold):
     raw_signal = row['signal']
     start = row['start']
     end = row['end']
+
+    # Only takes signal of PolyA-tail
     signal = raw_signal[start:end]
+
+    # Uses function above to remove outlies from PolyA-tail signal
     signal = remove_outliers(signal, threshold)
 
+    # Computes 25-75% quantile region
     first_quantile = int(0.25 * len(signal))
     third_quantile = int(0.75 * len(signal))
+
+    # Defines the signal in the 50% region
     signal50 = signal[first_quantile:third_quantile]
 
-    if len(signal50) == 0 or np.mean(signal50) == 0:
+    # Computes the mean of signal50
+    signal50_mean = np.mean(signal50)
+
+    # Checks that signal50 is not empty or the mean of signal50 is not 0
+    if len(signal50) == 0 or signal50_mean == 0:
         return None, None
 
-    signal50_mean = np.mean(signal50)
+    # Divides signal by the mean of signal50
     normalized = signal / signal50_mean
 
+    # Empty lists for the means and variances
     means = []
-    variations = []
+    variances = []
 
+    # Loop over lenght of the vector
     for j in range(vector_length):
+        # Calculates evenly spaced position 'x' along the signal
         x = int(j * (len(signal) / vector_length))
 
+        # Defines the start and end index of the window around position x
         start_avg = max(int(x - window_size_avg // 2), 0)
         end_avg = min(int(x + window_size_avg // 2), len(normalized))
+        
+        # Defines the window around x
         window_avg = normalized[start_avg:end_avg]
+        
+        # Appends the correct mean value of the window to the list 'means'
         means.append(np.mean(window_avg) if len(window_avg) > 0 else np.nan)
 
+        # Repeats for the var values
         start_var = max(int(x - window_size_var // 2), 0)
         end_var = min(int(x + window_size_var // 2), len(normalized))
+        
         window_var = normalized[start_var:end_var]
-        variations.append(np.var(window_var) if len(window_var) > 0 else np.nan)
+        
+        # Appends the correct variance value of the window to the list 'variances'
+        variances.append(np.var(window_var) if len(window_var) > 0 else np.nan)
 
-    return means, variations
+    return means, variances  # returns list of means and variances
 
 
 # ---------------------------------------------------------------------
@@ -80,8 +112,8 @@ app_ui = ui.page_sidebar(
     ui.sidebar(
         ui.input_select("vector_size", "Vector size selector", choices=[30, 60, 120, 240, 480, 960], selected=60),
         ui.h5("Window sizes"),
-        ui.input_select("avg_window_size", "Average Window Size", choices=[2, 5, 10, 20, 30, 60], selected=60),
-        ui.input_select("var_window_size", "Variance Window Size", choices=[5, 10, 20, 30, 60, 120], selected=120),
+        ui.input_select("avg_window_size", "Average - Window Size", choices=[2, 5, 10, 20, 30, 60], selected=60),
+        ui.input_select("var_window_size", "Variance - Window Size", choices=[5, 10, 20, 30, 60, 120], selected=120),
         ui.input_slider("z_score", "Z-score", 1, 6, 3),
         ui.input_text("text", "Select Mod Row(s) (Use comma seperation)", "0,1"),  
         ui.input_numeric("row_index_ctrl", "Select Ctrl Row", value=0, min=0),
