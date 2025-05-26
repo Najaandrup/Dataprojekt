@@ -16,7 +16,7 @@
     - a60_unmod_mean_plots.pdf
     - a60_unmod_var_plots.pdf
     - Outliers fjernelse og plot af ét signal.ipynb
-    - (Tilføj kommentar ala: *De øverste fire er det samme som den nederste blot for hele sættet, hvor den bruger gennemsnit og std*)
+    - (Tilføj kommentar ala: *De øverste fire er det samme som den nederste fil, blot for hele sættet, hvor den bruger gennemsnit og std*)
  
 - Mappen: 05 Shiny App
     - *Billeder og videoer af shiny app i brug*
