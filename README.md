@@ -5,7 +5,7 @@
 
 -  Mappen: 02 Data Visualization
     - Raw PolyA Signal: raw_polyA_signals_a60_60.pdf & raw_polyA_signals_a60_unmod.pdf
-    - (PolyATail Length: PolyATails_Lengths_Plots.pdf *(burde omdøbes)*)
+    - (PolyATail Length: PolyATail Lengths Plots.pdf)
  
 - Mappen: 03 Vectorization
     - Vectorization_median_plots.pdf (kig på a60_60 og a60_unmod)
