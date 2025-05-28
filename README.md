@@ -1,4 +1,4 @@
-# RNA-modifikationer i polyA-haler med Nanopore-sekventering (og machine learning)
+# Identifikation af RNA-modifikationer i polyA-haler med Nanopore-sekventering (og machine learning)
 
 ### Vejledning til læsning af Github:
 - Læs Projektbeskrivelse.pdf 
