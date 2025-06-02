@@ -1,6 +1,6 @@
 # Identifikation af RNA-modifikationer i polyA-haler med Nanopore-sekventering (og machine learning)
 
-[View script]("03 Vectorizaation/Vectorization_median_plots.pdf")
+[View script](03 Vectorization/Vectorization_median_plots.pdf)
 
 ### Vejledning til læsning af Github:
 - Læs `Projektbeskrivelse.pdf` 
