@@ -35,7 +35,7 @@
 
 Hvis tid, så kan appen afprøves:
 - Link til app: <a href="https://naja.shinyapps.io/05_shiny_app/"><code>Shiny App</code></a>
-- Download de fire filer under 05 Shiny App-Data for Shiny App og brug dem i appen
+- Download de fire filer under <a href="https://github.com/Najaandrup/Dataprojekt/tree/main/05%20Shiny%20App/Data%20for%20Shiny%20App"><code>Data for Shiny App</code></a> og brug dem i appen
 
 
 
