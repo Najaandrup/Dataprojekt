@@ -19,11 +19,12 @@
     - (Tilføj kommentar ala: *De øverste fire er det samme som den nederste fil, blot for hele sættet, hvor den bruger gennemsnit og std*)
  
 - Mappen: 05 Shiny App
-    - *Billeder og videoer af shiny app i brug*
-    - *Evt kode*
+    - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/Shiny%20App%20Eksempel.pdf"><code>Shiny App Eksempel.pdf</code></a>
+    - [Video after video shiny app i brug](https://juliemalm.github.io/Video-dataprojekt/)
+    - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/app.py"><code>app.py</code></a>
 
 
 
-[Video after video shiny app i brug](https://juliemalm.github.io/Video-dataprojekt/)
+
 
 
