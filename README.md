@@ -28,7 +28,8 @@ Læs <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20
 
 ## Video Preview
 
-[![Watch the video](https://img.icons8.com/ios-filled/100/000000/video-play.png)](https://juliemalm.github.io/Video-dataprojekt/)
+[![Watch the video](assets/video-thumbnail.png)](https://juliemalm.github.io/Video-dataprojekt/)
 
 Click the image to watch the video preview.
+
 
