@@ -28,6 +28,7 @@ Læs <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20
 
 ## Video Preview
 
-You can watch the video directly here:
+[![Watch the video](https://img.icons8.com/ios-filled/100/000000/video-play.png)](https://juliemalm.github.io/Video-dataprojekt/)
 
-[videos/ShinyAppEksempelOptagelse.mp4](05 Shiny App/ShinyAppEksempelOptagelse.mp4)
+Click the image to watch the video preview.
+
