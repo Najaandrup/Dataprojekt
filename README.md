@@ -5,18 +5,18 @@
 ### Vejledning til læsning af Github:
 - Læs først <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/Projektbeskrivelse.pdf"><code>Projektbeskrivelse.pdf</code></a> for en introduktion til projektet.
 
--  Mappen: 02 Data Visualization
+-  I mappen: 02 Data Visualization
     - Raw PolyA Signal: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_60.pdf"><code>raw_polyA_signals_a60_60.pdf</code></a> & <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_unmod.pdf"><code>raw_polyA_signals_a60_unmod.pdf</code></a>
     - PolyATail Length: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/PolyATail%20Length/PolyATail%20Lengths%20Plots.pdf"><code>PolyATail Lengths Plots.pdf</code></a>
 
      *Dette er for at få en fornemmelse af, hvor varierende rådataen er - både i støj og længde.*
  
-- Mappen: 03 Vectorization
+- I mappen: 03 Vectorization
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/03%20Vectorization/Vectorization_median_plots.pdf"><code>Vectorization_median_plots.pdf</code></a> (kig på a60_60 og a60_unmod)
  
      *Dette er for at vise vores første forsøg på at gøre rådataen mere ensartet; ved at lave vektorer af ens længde (vektorisering) vha. medianen og se om, der var tydelige ændringer i gennemsnitet og variansen på tværs af hele datasættet for de forskellige længder og modifikationsantal.*
 
-- Mappen: 04 Moving Vectorization
+- I mappen: 04 Moving Vectorization
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_60_mean_plots.pdf"><code>a60_60_mean_plots.pdf</code></a>
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_60_var_plots.pdf"><code>a60_60_var_plots.pdf</code></a>
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_unmod_mean_plots.pdf"><code>a60_unmod_mean_plots.pdf</code></a>
@@ -26,7 +26,7 @@
 
      *Dette er den metode af vektorisering, vi endte med at gå videre med - moving vectorization på et enkelt dataread ad gangen. Kort fortalt: Den laver den nye vektor ved at rulle et vindue hen over dataen og tage gennemsnit af det i vinduet og tilføje det til den nye vektor. Dette er gjort for både gennemsnittet og variansen igen.*
  
-- Mappen: 05 Shiny App
+- I mappen: 05 Shiny App
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/Shiny%20App%20Eksempel.pdf"><code>Shiny App Eksempel.pdf</code></a>
     - <a href="https://juliemalm.github.io/Video-dataprojekt/"><code>Video af Shiny App i brug</code></a>
     - Link til app kode: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/app.py"><code>app.py</code></a>
