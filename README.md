@@ -29,14 +29,16 @@
 - Mappen: 05 Shiny App
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/Shiny%20App%20Eksempel.pdf"><code>Shiny App Eksempel.pdf</code></a>
     - <a href="https://juliemalm.github.io/Video-dataprojekt/"><code>Video af Shiny App i brug</code></a>
-
-Hvis tid:
-
     - Link til app kode: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/app.py"><code>app.py</code></a>
-    - Link til app: <a href="https://naja.shinyapps.io/05_shiny_app/"><code>Shiny App</code></a> (Download de fire filer under /05 Shiny App
-/Data for Shiny App/ og brug dem i appen)
 
      *Dette er vores shiny app, som bruger metoden fra ovenover - så kan man uploade sine datasæt med og uden modifikationer og sammenligner dem vha. moving vectorization.*
+
+Hvis tid, så kan appen afprøves:
+
+    - Link til app: <a href="https://naja.shinyapps.io/05_shiny_app/"><code>Shiny App</code></a> 
+    - Download de fire filer under 05 Shiny App-Data for Shiny App og brug dem i appen
+
+
 
 
 
