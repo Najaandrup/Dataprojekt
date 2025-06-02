@@ -7,7 +7,7 @@
     - Raw PolyA Signal: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_60.pdf"><code>raw_polyA_signals_a60_60.pdf</code></a> & <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_unmod.pdf"><code>raw_polyA_signals_a60_unmod.pdf</code></a>
     - (PolyATail Length: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/PolyATail%20Length/PolyATail%20Lengths%20Plots.pdf"><code>PolyATail Lengths Plots.pdf</code></a>)
 
-    - *Dette er for at få en fornemmelse af, hvor varierende rådataen er - både i støj og længde.*
+     *Dette er for at få en fornemmelse af, hvor varierende rådataen er - både i støj og længde.*
  
 - Mappen: 03 Vectorization
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/03%20Vectorization/Vectorization_median_plots.pdf"><code>Vectorization_median_plots.pdf</code></a> (kig på a60_60 og a60_unmod)
