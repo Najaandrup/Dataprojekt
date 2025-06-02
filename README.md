@@ -25,3 +25,9 @@ Læs <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20
 - Mappen: 05 Shiny App
     - *Billeder og videoer af shiny app i brug*
     - *Evt kode*
+
+## Video Preview
+
+You can watch the video directly here:
+
+[videos/ShinyAppEksempelOptagelse.mp4](05 Shiny App/ShinyAppEksempelOptagelse.mp4)
