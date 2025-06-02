@@ -1,12 +1,10 @@
 # Identifikation af RNA-modifikationer i polyA-haler med Nanopore-sekventering (og machine learning)
 
-Læs <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a120_1mod_mean_plots.pdf"><code>Test.pdf</code></a>
-
 ### Vejledning til læsning af Github:
 - Læs `Projektbeskrivelse.pdf` 
 
 -  Mappen: 02 Data Visualization
-    - Raw PolyA Signal: `raw_polyA_signals_a60_60.pdf` & `raw_polyA_signals_a60_unmod.pdf`
+    - Raw PolyA Signal: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_60.pdf"><code>raw_polyA_signals_a60_60.pdf</code></a> & `raw_polyA_signals_a60_unmod.pdf`
     - (PolyATail Length: `PolyATail Lengths Plots.pdf`)
  
 - Mappen: 03 Vectorization
