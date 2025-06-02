@@ -22,10 +22,8 @@
     - *Billeder og videoer af shiny app i brug*
     - *Evt kode*
 
-## Video Preview
 
-[![Watch the video](assets/video-thumbnail.png)](https://juliemalm.github.io/Video-dataprojekt/)
 
-Click the image to watch the video preview.
+[Video after video shiny app i brug](https://juliemalm.github.io/Video-dataprojekt/)
 
 
