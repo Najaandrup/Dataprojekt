@@ -20,7 +20,7 @@
  
 - Mappen: 05 Shiny App
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/Shiny%20App%20Eksempel.pdf"><code>Shiny App Eksempel.pdf</code></a>
-    - [Video after video shiny app i brug](https://juliemalm.github.io/Video-dataprojekt/)
+    - <a href="https://juliemalm.github.io/Video-dataprojekt/"><code>Video after video shiny app i brug</code></a>
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/app.py"><code>app.py</code></a>
 
 
