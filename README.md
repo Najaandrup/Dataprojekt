@@ -20,7 +20,7 @@
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_unmod_mean_plots.pdf"><code>a60_unmod_mean_plots.pdf</code></a>
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_unmod_var_plots.pdf"><code>a60_unmod_var_plots.pdf</code></a>
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/Outliers%20fjernelse%20og%20plot%20af%20%C3%A9t%20signal.ipynb"><code>Outliers fjernelse og plot af ét signal.ipynb</code></a>
-    - (*Den nederste fil er den samme som de øverste fire, blot for et enkelt read i stedet for gennemsnitet af hele datasættet.*)
+        - (*Den nederste fil er den samme som de øverste fire, blot for et enkelt read i stedet for gennemsnitet af hele datasættet.*)
 
      *Dette er den metode af vektorisering, vi endte med at gå videre med - moving vectorization på et enkelt dataread ad gangen. Kort fortalt: Den laver de nye vektor video ved at rulle et vindue hen over dataen og tage gennemsnit af det i vinduet og tilføje det til den nye vektor. Dette er gjort for både gennemsnittet og variansen igen.*
  
