@@ -41,6 +41,7 @@
    - Åben appen vha. linket: <a href="https://naja.shinyapps.io/05_shiny_app/"><code>Shiny App</code></a>
    - Download de fire datafiler her: <a href="https://github.com/Najaandrup/Dataprojekt/tree/main/05%20Shiny%20App/Data%20for%20Shiny%20App"><code>Data for Shiny App</code></a>
    - Upload dem i appen og test funktionaliteten.
+
      *(Data der hedder a60_60 er med modifikation, de skal uploades til venstre og a_60_unmod skal uploades til højre)*
 
 
