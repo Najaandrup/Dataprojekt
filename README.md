@@ -1,5 +1,7 @@
 # Identifikation af RNA-modifikationer i polyA-haler med Nanopore-sekventering (og machine learning)
 
+*OBS: Klik gerne på linksene, mens Ctrl/Cmd holdes nede, således de åbnes i en ny fane.*
+
 ### Vejledning til læsning af Github:
 - Læs `Projektbeskrivelse.pdf` 
 
@@ -22,7 +24,7 @@
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/Outliers%20fjernelse%20og%20plot%20af%20%C3%A9t%20signal.ipynb"><code>Outliers fjernelse og plot af ét signal.ipynb</code></a>
         - (*Den nederste fil er den samme som de øverste fire, blot for et enkelt read i stedet for gennemsnitet af hele datasættet.*)
 
-     *Dette er den metode af vektorisering, vi endte med at gå videre med - moving vectorization på et enkelt dataread ad gangen. Kort fortalt: Den laver de nye vektor video ved at rulle et vindue hen over dataen og tage gennemsnit af det i vinduet og tilføje det til den nye vektor. Dette er gjort for både gennemsnittet og variansen igen.*
+     *Dette er den metode af vektorisering, vi endte med at gå videre med - moving vectorization på et enkelt dataread ad gangen. Kort fortalt: Den laver den nye vektor ved at rulle et vindue hen over dataen og tage gennemsnit af det i vinduet og tilføje det til den nye vektor. Dette er gjort for både gennemsnittet og variansen igen.*
  
 - Mappen: 05 Shiny App
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/Shiny%20App%20Eksempel.pdf"><code>Shiny App Eksempel.pdf</code></a>
@@ -30,7 +32,7 @@
     - Link til app kode: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/app.py"><code>app.py</code></a>
     - Link til app: <a href="https://naja.shinyapps.io/05_shiny_app/"><code>Shiny App</code></a>
 
-     *Dette er vores shiny app, som bruger metoden fra ovenover - så kan man uploade sit datasæt med og uden modifikationer og sammenligner dem vha. moving vectorization.*
+     *Dette er vores shiny app, som bruger metoden fra ovenover - så kan man uploade sine datasæt med og uden modifikationer og sammenligner dem vha. moving vectorization.*
 
 
 
