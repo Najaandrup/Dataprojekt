@@ -12,7 +12,7 @@
 - Mappen: 03 Vectorization
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/03%20Vectorization/Vectorization_median_plots.pdf"><code>Vectorization_median_plots.pdf</code></a> (kig på a60_60 og a60_unmod)
  
-     *Dette er for at vise vores første forsøg at gøre rådataen mere ensartet; ved at lave vektorer af ens længde vha. medianen og se om, der var tydelige ændringer i gennemsnitet og variansen på tværs af hele datasættet for de forskellige længder og modifikationsantal.*
+     *Dette er for at vise vores første forsøg at gøre rådataen mere ensartet; ved at lave vektorer af ens længde (vektorisering) vha. medianen og se om, der var tydelige ændringer i gennemsnitet og variansen på tværs af hele datasættet for de forskellige længder og modifikationsantal.*
 
 - Mappen: 04 Moving Vectorization
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_60_mean_plots.pdf"><code>a60_60_mean_plots.pdf</code></a>
@@ -21,6 +21,8 @@
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_unmod_var_plots.pdf"><code>a60_unmod_var_plots.pdf</code></a>
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/Outliers%20fjernelse%20og%20plot%20af%20%C3%A9t%20signal.ipynb"><code>Outliers fjernelse og plot af ét signal.ipynb</code></a>
     - (Tilføj kommentar ala: *De øverste fire er det samme som den nederste fil, blot for hele sættet, hvor den bruger gennemsnit og std*)
+
+     *Dette er den metode af vektorisering, vi endte med at gå videre med - moving vectorization. Kort fortalt: Den laver de nye vektor video ved at rulle et vindue hen over dataen og tage gennemsnit af det i vinduet og tilføje til den nye vektor. Dette er gjort for både gennemsnittet og variansen igen.*
  
 - Mappen: 05 Shiny App
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/Shiny%20App%20Eksempel.pdf"><code>Shiny App Eksempel.pdf</code></a>
