@@ -3,7 +3,7 @@
 **OBS**: *Hold gerne Ctrl/Cmd nede, når der klikkes på links, så de åbner i en ny fane.*
 
 ### Vejledning til læsning af Github:
-- Læs <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/Projektbeskrivelse.pdf"><code>Projektbeskrivelse.pdf</code></a>
+- Læs først <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/Projektbeskrivelse.pdf"><code>Projektbeskrivelse.pdf</code></a> for en introduktion til projektet.
 
 -  Mappen: 02 Data Visualization
     - Raw PolyA Signal: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_60.pdf"><code>raw_polyA_signals_a60_60.pdf</code></a> & <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_unmod.pdf"><code>raw_polyA_signals_a60_unmod.pdf</code></a>
