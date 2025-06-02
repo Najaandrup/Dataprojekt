@@ -1,6 +1,6 @@
 # Identifikation af RNA-modifikationer i polyA-haler med Nanopore-sekventering (og machine learning)
 
-*OBS: Klik gerne på linksene, mens Ctrl/Cmd holdes nede, således de åbnes i en ny fane.*
+**OBS**: *Klik gerne på linksene, mens Ctrl/Cmd holdes nede, således de åbnes i en ny fane.*
 
 ### Vejledning til læsning af Github:
 - Læs <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/Projektbeskrivelse.pdf"><code>Projektbeskrivelse.pdf</code></a>
