@@ -2,9 +2,7 @@
 
 **OBS**: *Hold gerne Ctrl/Cmd nede, når der klikkes på links, så de åbner i en ny fane.*
 
---
-
-### Vejledning til læsning af Github:
+## Vejledning til læsning af Github:
 1. Læs først <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/Projektbeskrivelse.pdf"><code>Projektbeskrivelse.pdf</code></a> for en introduktion til projektet.
 
 2.  I mappen: 02 Data Visualization
