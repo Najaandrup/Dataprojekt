@@ -21,7 +21,7 @@
 *Dette er for at vise vores første forsøg på at gøre rådataen mere ensartet; ved at lave vektorer af ens længde (vektorisering) vha. medianen og se om, der var tydelige ændringer i gennemsnitet og variansen på tværs af hele datasættet for de forskellige længder og modifikationsantal.*
 
 **4. Mappe: 04 Moving Vectorization**
-   - Plots af moving vectorization (**rullende vektorisering??**) for gennemsnit og varians:
+   - Plots af moving vectorization (rullende vektorisering) for gennemsnit og varians:
       - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_60_mean_plots.pdf"><code>a60_60_mean_plots.pdf</code></a>
       - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_60_var_plots.pdf"><code>a60_60_var_plots.pdf</code></a>
       - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_unmod_mean_plots.pdf"><code>a60_unmod_mean_plots.pdf</code></a>
@@ -29,7 +29,7 @@
    - Denne fil er den samme som de øverste fire, men blot for ét enkelt read i stedet for gennemsnitet af hele datasættet:
         - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/Outliers%20fjernelse%20og%20plot%20af%20%C3%A9t%20signal.ipynb"><code>Outliers fjernelse og plot af ét signal.ipynb</code></a>
 
-*Dette er den metode af vektorisering, vi endte med at gå videre med: moving vectorization på et enkelt dataread ad gangen. Kort fortalt: Den laver den nye vektor ved at rulle et vindue hen over dataen og tage gennemsnit af det i vinduet og tilføje det til den nye vektor. Dette er gjort for både gennemsnittet og variansen igen.*
+*Dette er den metode af vektorisering, vi endte med at gå videre med: moving vectorization på et enkelt dataread ad gangen. Kort fortalt: Den laver den nye vektor ved at rulle et vindue hen over dataen og tage gennemsnit af dataen i vinduet og tilføje dette til den nye vektor. Dette er gjort for både gennemsnittet og variansen igen.*
  
 **5. Mappe: 05 Shiny App**
    - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/05%20Shiny%20App/Shiny%20App%20Eksempel.pdf"><code>Shiny App Eksempel.pdf</code></a>
