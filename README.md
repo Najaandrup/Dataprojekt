@@ -12,6 +12,8 @@
 - Mappen: 03 Vectorization
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/03%20Vectorization/Vectorization_median_plots.pdf"><code>Vectorization_median_plots.pdf</code></a> (kig på a60_60 og a60_unmod)
  
+     *Dette er for at vise vores første forsøg at omdanne rådaten til mere ensartet vektorer vha*
+
 - Mappen: 04 Moving Vectorization
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_60_mean_plots.pdf"><code>a60_60_mean_plots.pdf</code></a>
     - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/04%20Moving%20Vectorization/a60_60_var_plots.pdf"><code>a60_60_var_plots.pdf</code></a>
