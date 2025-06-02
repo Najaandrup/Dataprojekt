@@ -6,7 +6,7 @@
 - Læs først <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/Projektbeskrivelse.pdf"><code>Projektbeskrivelse.pdf</code></a> for en introduktion til projektet.
 
 -  I mappen: 02 Data Visualization
-    - Start med at kigge på plots af de rå PolyA-hale signaler, som ligger i mappen *Raw PolyA Signal*: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_60.pdf"><code>raw_polyA_signals_a60_60.pdf</code></a> & <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_unmod.pdf"><code>raw_polyA_signals_a60_unmod.pdf</code></a>
+    - Start med at kigge på plots af de rå PolyA-hale signaler, som ligger i mappen 'Raw PolyA Signal': <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_60.pdf"><code>raw_polyA_signals_a60_60.pdf</code></a> & <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_unmod.pdf"><code>raw_polyA_signals_a60_unmod.pdf</code></a>
     - PolyATail Length: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/PolyATail%20Length/PolyATail%20Lengths%20Plots.pdf"><code>PolyATail Lengths Plots.pdf</code></a>
 
      *Dette er for at få en fornemmelse af, hvor varierende rådataen er - både i støj og længde.*
