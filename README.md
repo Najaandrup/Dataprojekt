@@ -6,10 +6,10 @@
 **1. Start med at læse projektbeskrivelsen**: <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/Projektbeskrivelse.pdf"><code>Projektbeskrivelse.pdf</code></a>
 
 **2. Mappe: 02 Data Visualization**
-   - Plots af de rå polyA-hale signaler i mappen 'Raw PolyA Signal', som viser et udsnit råsignaler fra data med hhv. én modifikation og uden modifikation:
+   - Plots af de rå polyA-hale signaler (i mappen 'Raw PolyA Signal'), som viser et udsnit råsignaler fra data med hhv. én modifikation og uden modifikation:
         - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_60.pdf"><code>raw_polyA_signals_a60_60.pdf</code></a>
         - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/Raw%20PolyA%20Signal/raw_polyA_signals_a60_unmod.pdf"><code>raw_polyA_signals_a60_unmod.pdf</code></a>
-   - Plots af længderne af polyA-halerne i mappen 'PolyATail Length', som giver indblik i længdefordeling på tværs af reads:
+   - Plots af længderne af polyA-halerne (i mappen 'PolyATail Length'), som giver indblik i længdefordeling på tværs af reads:
         - <a href="https://github.com/Najaandrup/Dataprojekt/blob/main/02%20Data%20Visualization/PolyATail%20Length/PolyATail%20Lengths%20Plots.pdf"><code>PolyATail Lengths Plots.pdf</code></a>
 
    *Formålet med dette er at vise, hvor varierende rådataen er - både i længde og støj.*
@@ -43,4 +43,4 @@
    - Download de fire testfiler i mappen: <a href="https://github.com/Najaandrup/Dataprojekt/tree/main/05%20Shiny%20App/Data%20for%20Shiny%20App"><code>Data for Shiny App</code></a>
    - Upload dem i appen og test funktionaliteten.
 
-     *(Datasæt der hedder a60_60 er med modifikation og skal uploades til venstre i appen. Dem der hedder a60_unmod er uden modifikation og skal uploades til højrei appen.)*
+     *(Datasæt der hedder a60_60 er med modifikation og skal uploades til venstre i appen. Dem der hedder a60_unmod er uden modifikation og skal uploades til højre i appen.)*
