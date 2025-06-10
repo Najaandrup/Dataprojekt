@@ -30,16 +30,22 @@ def process_and_plot_data(tsv_file, pod_file, nwindows):
     # Compute mean values for each window
     list_vectorized = []
     for vector_test in polya_list:
+        # Determine basic window size
         window_size = len(vector_test) // nwindows
+        # Make array of size nwindows, element intially equal to window_size
         lwin = np.repeat(window_size, nwindows)
-        
+
+        # Elements left over after even division are randomly assigned to different windows 
         rest = len(vector_test) - window_size * nwindows
         add_positions = np.random.choice(nwindows, rest, replace=False)
+        # The selected windows gets incremented by 1
         lwin[add_positions] += 1
-        
+
+        # Compute window start and end
         window_ends = np.cumsum(lwin)
         window_starts = window_ends - lwin + 1
-        
+
+        # Compute mean for each window and add to list
         vector_mean = [np.mean(vector_test[start-1:end]) for start, end in zip(window_starts, window_ends)]
         list_vectorized.append(vector_mean)
     
