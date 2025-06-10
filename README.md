@@ -39,7 +39,7 @@
      *Dette er vores Shiny App, som bruger moving vectorization og giver mulighed for at uploade og sammenligne datasæt med og uden modifikationer.*
 
 **Prøv selv appen**:
-   - Åben appen vha. linket: <a href="https://naja.shinyapps.io/05_shiny_app/"><code>Shiny App</code></a>
+   - Åben appen vha. linket: <a href="https://naja.shinyapps.io/05_shiny_app1/"><code>Shiny App</code></a>
    - Download de fire testfiler i mappen: <a href="https://github.com/Najaandrup/Dataprojekt/tree/main/05%20Shiny%20App/Data%20for%20Shiny%20App"><code>Data for Shiny App</code></a>
    - Upload dem i appen og test funktionaliteten.
 
